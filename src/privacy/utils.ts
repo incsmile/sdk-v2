@@ -29,7 +29,7 @@ function randBytes(n = ED25519_KEY_SIZE) {
     console.log('Rand bytes sjcl error: ',e);
     let randomFunc = getRandBytesFunc();
     if (randomFunc) {
-      return randomFunc(n);
+      return <number[]>Array.from(randomFunc(n));
     } else {
       throw Error('Utility.RandomBytesFunc is null');
     }
