@@ -1,6 +1,6 @@
 import bn from 'bn.js';
 declare function setRandBytesFunc(f: Function): void;
-declare function randBytes(n?: number): any;
+declare function randBytes(n?: number): number[];
 declare function addPaddingBigInt(numInt: bn, fixedSize: number): number[];
 declare function intToByteArr(n: number): number[];
 declare function checkDuplicateBigIntArray(arr: any[]): boolean;

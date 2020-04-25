@@ -1,7 +1,7 @@
 /// <reference types="node" />
 declare class MnemonicGenerator {
     constructor();
-    newEntropy(bitSize: number): any;
+    newEntropy(bitSize: number): number[];
     newMnemonic(entropy: any): string;
     padByteSlice(slice: any, lenght: any): any;
     addChecksum(data: any): number[];
