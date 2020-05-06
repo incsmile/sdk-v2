@@ -5,15 +5,32 @@ import { ENCODE_VERSION } from '@src/constants/constants';
 import { PRVIDSTR, PDEPOOLKEY } from '@src/constants/wallet';
 import CoinModel, { CoinRawData } from '@src/models/coin';
 
-async function sendRequest(method: string, params: any) : Promise<any> {
-  const data = {
-    jsonrpc: '1.0',
-    method: method,
-    params: params,
-    id: 1
+const CACHED: {[key: string]: any} = {};
+
+async function sendRequest(method: string, params: any, cacheKey?: string) : Promise<any> {
+  const getData = async () => {
+    const data = {
+      jsonrpc: '1.0',
+      method: method,
+      params: params,
+      id: 1
+    };
+
+    const rs = await httpService.post('', data);
+    cacheKey && (CACHED[cacheKey] = rs);
+
+    return rs;
   };
 
-  return await httpService.post('', data);
+  // return from cached
+  if (CACHED[cacheKey]) {
+    // request new data in background
+    getData();
+    return CACHED[cacheKey];
+  };
+
+  const rs = await getData();
+  return rs;
 };
 
 class RpcClient {
@@ -26,8 +43,10 @@ class RpcClient {
             'ReadonlyKey': viewingKey,
           }],
           ...tokenID ? [tokenID] : []
-        ]
+        ],
+        `listoutputcoins-${tokenID}-${paymentAdrr}`
       );
+      
 
       const outCoinsMap = result.Outputs;
 
@@ -50,7 +69,8 @@ class RpcClient {
           paymentAddr,
           serialNumberStrs,
           ...tokenID ? [tokenID] : []
-        ]
+        ],
+        `hasserialnumbers-${paymentAddr}-${tokenID}-${JSON.stringify(serialNumberStrs)}`
       );
 
       return result;
