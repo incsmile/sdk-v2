@@ -1,5 +1,13 @@
-import axios from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { getConfig } from '@src/config';
+
+function retryRequestWithDelay(instance: AxiosInstance, config: AxiosRequestConfig, delayTime: number) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(instance(config));
+    }, delayTime);
+  });
+}
 
 const TIMEOUT = 20000;
 const instance = axios.create({
@@ -28,15 +36,20 @@ instance.interceptors.response.use(res => {
   }
 
   return Promise.resolve(result);
-}, errorData => {
-  const errResponse = errorData?.response;
+}, error => {
+  const { config, response: errResponse } = error;
+  const { status } = errResponse;
+
+  if ([503, 504].includes(status)) {
+    return retryRequestWithDelay(instance, config, 1000);
+  }
 
   // can not get response, alert to user
-  if (errorData?.isAxiosError && !errResponse) {
+  if (error?.isAxiosError && !errResponse) {
     throw new ErrorCode('Send request RPC failed');
   }
 
-  return Promise.reject(errorData);
+  return Promise.reject(error);
 });
 
 export default instance;
