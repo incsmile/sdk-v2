@@ -1,4 +1,5 @@
-declare const instance: import("axios").AxiosInstance;
+import { AxiosInstance } from 'axios';
+declare const instance: AxiosInstance;
 export default instance;
 /**
  * Document: https://github.com/axios/axios#instance-methodsaxios#request(config)
