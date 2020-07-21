@@ -189,6 +189,74 @@ export default async function sendPrivacyToken({
   new Validator('tokenName', tokenName).required().string();
   new Validator('tokenSymbol', tokenSymbol).required().string();
 
+  const {
+    txInfo, nativeTxInput, privacyTxInput, nativePaymentAmountBN, privacyPaymentAmountBN, usePrivacyForNativeToken, usePrivacyForPrivacyToken
+  } = await createRawPrivacyTokenTx({
+    accountKeySet,
+    nativeAvailableCoins,
+    privacyAvailableCoins,
+    nativePaymentInfoList,
+    privacyPaymentInfoList,
+    nativeFee,
+    privacyFee,
+    tokenId,
+    tokenSymbol,
+    tokenName
+  });
+
+  const sentInfo = await sendRawPrivacyTokenTx(txInfo.b58CheckEncodeTx);
+
+  const { serialNumberList: nativeSpendingCoinSNs, listUTXO: nativeListUTXO } = getCoinInfoForCache(nativeTxInput.inputCoinStrs);
+  const { serialNumberList: privacySpendingCoinSNs, listUTXO: privacyListUTXO } = getCoinInfoForCache(privacyTxInput.inputCoinStrs);
+  
+  return createHistoryInfo({
+    txId: sentInfo.txId,
+    lockTime: txInfo.lockTime,
+    nativePaymentInfoList,
+    nativeFee,
+    nativeListUTXO,
+    nativePaymentAmount: nativePaymentAmountBN.toNumber(),
+    nativeSpendingCoinSNs,
+    tokenSymbol,
+    tokenName,
+    tokenId,
+    privacyFee,
+    privacyListUTXO,
+    privacyPaymentAmount: privacyPaymentAmountBN.toNumber(),
+    privacyPaymentInfoList,
+    privacySpendingCoinSNs,
+    txType: TX_TYPE.PRIVACY_TOKEN_WITH_PRIVACY_MODE,
+    privacyTokenTxType: PRIVACY_TOKEN_TX_TYPE.TRANSFER,
+    accountPublicKeySerialized: accountKeySet.publicKeySerialized,
+    usePrivacyForPrivacyToken,
+    usePrivacyForNativeToken,
+    historyType: HISTORY_TYPE.SEND_PRIVACY_TOKEN
+  });
+}
+
+export async function createRawPrivacyTokenTx({
+  accountKeySet,
+  nativeAvailableCoins,
+  privacyAvailableCoins,
+  nativePaymentInfoList,
+  privacyPaymentInfoList,
+  nativeFee = DEFAULT_NATIVE_FEE,
+  privacyFee,
+  tokenId,
+  tokenSymbol,
+  tokenName
+} : SendParam) {
+  new Validator('accountKeySet', accountKeySet).required();
+  new Validator('nativeAvailableCoins', nativeAvailableCoins).required();
+  new Validator('privacyAvailableCoins', privacyAvailableCoins).required();
+  new Validator('nativePaymentInfoList', nativePaymentInfoList).paymentInfoList();
+  new Validator('privacyPaymentInfoList', privacyPaymentInfoList).required().paymentInfoList();
+  new Validator('nativeFee', nativeFee).required().amount();
+  new Validator('privacyFee', privacyFee).required().amount();
+  new Validator('tokenId', tokenId).required().string();
+  new Validator('tokenName', tokenName).required().string();
+  new Validator('tokenSymbol', tokenSymbol).required().string();
+
   if (privacyFee && !(await hasExchangeRate(tokenId))) {
     throw new ErrorCode(`Token ${tokenId} can not use for paying fee, has no exchange rate!`);
   }
@@ -217,33 +285,18 @@ export default async function sendPrivacyToken({
     initTxMethod: goMethods.initPrivacyTokenTx,
   });
 
-
-  const sentInfo = await sendB58CheckEncodeTxToChain(rpc.sendRawTxCustomTokenPrivacy, txInfo.b58CheckEncodeTx);
-
-  const { serialNumberList: nativeSpendingCoinSNs, listUTXO: nativeListUTXO } = getCoinInfoForCache(nativeTxInput.inputCoinStrs);
-  const { serialNumberList: privacySpendingCoinSNs, listUTXO: privacyListUTXO } = getCoinInfoForCache(privacyTxInput.inputCoinStrs);
-  
-  return createHistoryInfo({
-    txId: sentInfo.txId,
-    lockTime: txInfo.lockTime,
-    nativePaymentInfoList,
-    nativeFee,
-    nativeListUTXO,
-    nativePaymentAmount: nativePaymentAmountBN.toNumber(),
-    nativeSpendingCoinSNs,
-    tokenSymbol,
-    tokenName,
-    tokenId,
-    privacyFee,
-    privacyListUTXO,
-    privacyPaymentAmount: privacyPaymentAmountBN.toNumber(),
-    privacyPaymentInfoList,
-    privacySpendingCoinSNs,
-    txType: TX_TYPE.PRIVACY_TOKEN_WITH_PRIVACY_MODE,
-    privacyTokenTxType: PRIVACY_TOKEN_TX_TYPE.TRANSFER,
-    accountPublicKeySerialized: accountKeySet.publicKeySerialized,
+  return {
+    txInfo,
+    nativeTxInput,
+    privacyTxInput,
+    nativePaymentAmountBN,
+    privacyPaymentAmountBN,
     usePrivacyForPrivacyToken,
-    usePrivacyForNativeToken,
-    historyType: HISTORY_TYPE.SEND_PRIVACY_TOKEN
-  });
+    usePrivacyForNativeToken
+  };
+}
+
+
+export async function sendRawPrivacyTokenTx(b58CheckEncodeTx: string) {
+  return await sendB58CheckEncodeTxToChain(rpc.sendRawTxCustomTokenPrivacy, b58CheckEncodeTx);
 }

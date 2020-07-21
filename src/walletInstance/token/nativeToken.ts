@@ -2,12 +2,14 @@ import { TokenInfo } from '@src/constants';
 import Token from './token';
 import NativeTokenModel from '@src/models/token/nativeToken';
 import AccountKeySetModel from '@src/models/key/accountKeySet';
-import sendNativeToken from '@src/services/tx/sendNativeToken';
+import sendNativeToken, { sendRawNativeTokenTx } from '@src/services/tx/sendNativeToken';
+import { createNativeTokenTx } from '@src/services/tx/sendNativeToken';
 import PaymentInfoModel from '@src/models/paymentInfo';
 import sendStakingRequest from '@src/services/tx/sendStakingRequest';
 import sendNativeTokenPdeContribution from '@src/services/tx/sendNativeTokenPdeContribution';
 import sendNativeTokenPdeTradeRequest from '@src/services/tx/sendNativeTokenPdeTradeRequest';
 import Validator from '@src/utils/validator';
+// import sendNativeTokenDefragment from '@src/services/tx/sendNativeTokenDefragment';
 
 class NativeToken extends Token implements NativeTokenModel {
   tokenId: string;
@@ -40,6 +42,35 @@ class NativeToken extends Token implements NativeTokenModel {
       return history;
     } catch (e) {
       L.error('Native token transfer failed', e);
+      throw e;
+    }
+  }
+
+  async createRawTx(paymentInfoList: PaymentInfoModel[], nativeFee: number) {
+    try {
+      new Validator('paymentInfoList', paymentInfoList).required().paymentInfoList();
+      new Validator('nativeFee', nativeFee).required().amount();
+  
+      L.info('Create raw native token tx', { paymentInfoList, nativeFee });
+  
+      const res = await createNativeTokenTx({ nativePaymentInfoList: paymentInfoList, nativeFee: nativeFee, accountKeySet: this.accountKeySet, availableCoins: await this.getAvailableCoins() });
+      const { txInfo } = res;
+
+      L.info(`Base58 check data tx ${txInfo.b58CheckEncodeTx}`);
+  
+      return res;
+    } catch (e) {
+      L.error('Create raw native token tx failed', e);
+      throw e;
+    }
+  }
+
+  static async sendRawTx(b58CheckEncodeTx: string) {
+    try {
+      new Validator('b58CheckEncodeTx', b58CheckEncodeTx).required().string();
+      return await sendRawNativeTokenTx(b58CheckEncodeTx);
+    } catch (e) {
+      L.error('Send raw native token failed', e);
       throw e;
     }
   }
@@ -123,6 +154,28 @@ class NativeToken extends Token implements NativeTokenModel {
       throw e;
     }
   }
+
+  // async defragment(defragmentAmount: number, nativeFee: number, maxCoinNumberToDefragment?: number) {
+  //   try {
+  //     new Validator('defragmentAmount', defragmentAmount).required().amount();
+  //     new Validator('nativeFee', nativeFee).required().amount();
+  
+  //     L.info('Native token defragment', { defragmentAmount, nativeFee });
+  
+  //     const history = await sendNativeTokenDefragment({ defragmentAmount, nativeFee: nativeFee, accountKeySet: this.accountKeySet, availableNativeCoins: await this.getAvailableCoins(), maxCoinNumber: maxCoinNumberToDefragment });
+      
+  //     if (history) {
+  //       L.info(`Native token defragmented successfully with tx id ${history.txId}`);
+  //     } else {
+  //       L.info('Not much coins need to defragment');
+  //     }
+
+  //     return history;
+  //   } catch (e) {
+  //     L.error('Native token defragmented failed', e);
+  //     throw e;
+  //   }
+  // }
 }
 
 export default NativeToken;

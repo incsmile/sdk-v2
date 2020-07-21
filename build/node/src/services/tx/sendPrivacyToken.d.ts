@@ -60,5 +60,21 @@ export declare function createTx({ nativeTxInput, nativePaymentInfoList, nativeT
 }>;
 export declare function hasExchangeRate(tokenId: string): Promise<boolean>;
 export default function sendPrivacyToken({ accountKeySet, nativeAvailableCoins, privacyAvailableCoins, nativePaymentInfoList, privacyPaymentInfoList, nativeFee, privacyFee, tokenId, tokenSymbol, tokenName }: SendParam): Promise<import("../../..").TxHistoryModel>;
+export declare function createRawPrivacyTokenTx({ accountKeySet, nativeAvailableCoins, privacyAvailableCoins, nativePaymentInfoList, privacyPaymentInfoList, nativeFee, privacyFee, tokenId, tokenSymbol, tokenName }: SendParam): Promise<{
+    txInfo: {
+        b58CheckEncodeTx: string;
+        lockTime: number;
+        tokenID?: string;
+    };
+    nativeTxInput: TxInputType;
+    privacyTxInput: TxInputType;
+    nativePaymentAmountBN: bn;
+    privacyPaymentAmountBN: bn;
+    usePrivacyForPrivacyToken: boolean;
+    usePrivacyForNativeToken: boolean;
+}>;
+export declare function sendRawPrivacyTokenTx(b58CheckEncodeTx: string): Promise<{
+    txId: string;
+}>;
 export {};
 //# sourceMappingURL=sendPrivacyToken.d.ts.map

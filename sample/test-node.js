@@ -56,30 +56,30 @@ async function main() {
       await state.wallet.init('123', 'TEST');
     });
 
-    await section('BACKUP WALLET', async () => {
-      state.encWallet = state.wallet.backup('2');
-    });
+    // await section('BACKUP WALLET', async () => {
+    //   state.encWallet = state.wallet.backup('2');
+    // });
 
-    await section('RESTORE WALLET', async () => {
-      await incognito.WalletInstance.restore(state.encWallet, '2');
-    });
+    // await section('RESTORE WALLET', async () => {
+    //   await incognito.WalletInstance.restore(state.encWallet, '2');
+    // });
 
-    await section('GET ALL ACCOUNTS', async () => {
-      console.log(state.wallet.masterAccount.getAccounts());
-    });
+    // await section('GET ALL ACCOUNTS', async () => {
+    //   console.log(state.wallet.masterAccount.getAccounts());
+    // });
 
-    await section('ADD ACCOUNT', async () => {
-      state.newAccount = await state.wallet.masterAccount.addAccount('Test acc', 3);
-      console.log(state.newAccount);
-    });
+    // await section('ADD ACCOUNT', async () => {
+    //   state.newAccount = await state.wallet.masterAccount.addAccount('Test acc', 3);
+    //   console.log(state.newAccount);
+    // });
 
-    await section('ACCOUNT KEYS', async () => {
-      console.log(state.newAccount.key.keySet);
-    });
+    // await section('ACCOUNT KEYS', async () => {
+    //   console.log(state.newAccount.key.keySet);
+    // });
 
-    await section('ACCOUNT BLS KEY', async () => {
-      console.log(await state.newAccount.getBLSPublicKeyB58CheckEncode());
-    });
+    // await section('ACCOUNT BLS KEY', async () => {
+    //   console.log(await state.newAccount.getBLSPublicKeyB58CheckEncode());
+    // });
 
     await section('IMPORT ACCOUNT', async () => {
       state.importedAccount = await state.wallet.masterAccount.importAccount('Imported acc', '112t8rnX54YTL75HRsg6o7zjxLpYKL72iNQTaP5RRWY3VWcGEugSu1be8ApJYVFoW6wy9JeJFjBbodPCchexYTzjLdVYEBFE6XWEggHhKFyd');
@@ -98,73 +98,103 @@ async function main() {
       // });
     });
 
-    await section('GET TOTAL BALANCE NATIVE TOKEN', async () => {
-      console.log((await state.importedAccount.nativeToken.getTotalBalance()).toNumber());
-    });
+    // await section('CREATE RAW NATIVE TOKEN TX', async () => {
+    //   const { txInfo: { b58CheckEncodeTx } } = await state.importedAccount.nativeToken.createRawTx([
+    //     {
+    //       paymentAddressStr: state.importedAccount.key.keySet.paymentAddressKeySerialized,
+    //       amount: 10,
+    //       message: ''
+    //     }
+    //   ], 10);
 
-    await section('GET AVAILABALE BALANCE NATIVE TOKEN', async () => {
-      console.log((await state.importedAccount.nativeToken.getAvaiableBalance()).toNumber());
-    });
+    //   // send raw tx
+    //   const txInfo = await incognito.NativeTokenInstance.sendRawTx(b58CheckEncodeTx);
+    //   console.log('Send raw data', txInfo);
+    // });
 
-    await section('ACCOUNT FOLLOW TOKEN', async () => {
-      state.importedAccount.followTokenById('8fb58c65541b62a3eb8d99f62f4a9e2f8eaf99b9860f566674b3989e521594b2');
-      console.log(state.importedAccount.privacyTokenIds);      
-    });
+    // await section('GET TOTAL BALANCE NATIVE TOKEN', async () => {
+    //   console.log((await state.importedAccount.nativeToken.getTotalBalance()).toNumber());
+    // });
 
-    await section('ACCOUNT GET ALL FOLLOWING TOKEN', async () => {
-      const tokens = await state.importedAccount.getFollowingPrivacyToken();
-      console.log(tokens);
-    });
+    // await section('GET AVAILABALE BALANCE NATIVE TOKEN', async () => {
+    //   console.log((await state.importedAccount.nativeToken.getAvaiableBalance()).toNumber());
+    // });
+
+    // await section('ACCOUNT FOLLOW TOKEN', async () => {
+    //   state.importedAccount.followTokenById('8fb58c65541b62a3eb8d99f62f4a9e2f8eaf99b9860f566674b3989e521594b2');
+    //   console.log(state.importedAccount.privacyTokenIds);      
+    // });
+
+    // await section('ACCOUNT GET ALL FOLLOWING TOKEN', async () => {
+    //   const tokens = await state.importedAccount.getFollowingPrivacyToken();
+    //   console.log(tokens);
+    // });
 
     await section('ACCOUNT GET TOKEN WITH ID', async () => {
       state.privacyToken = await state.importedAccount.getFollowingPrivacyToken('8fb58c65541b62a3eb8d99f62f4a9e2f8eaf99b9860f566674b3989e521594b2');
       console.log(state.privacyToken);
     });
 
-    await section('GET TOTAL BALANCE PRIVACY TOKEN', async () => {
-      console.log((await state.privacyToken.getTotalBalance()).toNumber());
-    });
+    // await section('GET TOTAL BALANCE PRIVACY TOKEN', async () => {
+    //   console.log((await state.privacyToken.getTotalBalance()).toNumber());
+    // });
 
-    await section('GET AVAILABALE BALANCE PRIVACY TOKEN', async () => {
-      console.log((await state.privacyToken.getAvaiableBalance()).toNumber());
-    });
+    // await section('GET AVAILABALE BALANCE PRIVACY TOKEN', async () => {
+    //   console.log((await state.privacyToken.getAvaiableBalance()).toNumber());
+    // });
 
-    await section('TRANSFER PRIVACY TOKEN', async () => {
+    // await section('TRANSFER PRIVACY TOKEN', async () => {
+    //   if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
+    //     console.log(await state.privacyToken.transfer([
+    //       {
+    //         paymentAddressStr: state.newAccount.key.keySet.paymentAddressKeySerialized,
+    //         amount: 10,
+    //         message: ''
+    //       }
+    //     ], 10, 0));
+    //   }
+    // });
+
+    await section('CREATE RAW PRIVACY TOKEN TX', async () => {
       if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
-        console.log(await state.privacyToken.transfer([
+        const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTx([
           {
-            paymentAddressStr: state.newAccount.key.keySet.paymentAddressKeySerialized,
+            paymentAddressStr: state.importedAccount.key.keySet.paymentAddressKeySerialized,
             amount: 10,
             message: ''
           }
-        ], 10, 0));
+        ], 10, 0);
+  
+        // send raw tx
+        const txInfo = await incognito.PrivacyTokenInstance.sendRawTx(b58CheckEncodeTx);
+        console.log('Send raw data', txInfo);
       }
     });
 
-    await section('ACCOUNT UNFOLLOW TOKEN', async () => {
-      state.importedAccount.unfollowTokenById('8fb58c65541b62a3eb8d99f62f4a9e2f8eaf99b9860f566674b3989e521594b2');
-      console.log(state.importedAccount.privacyTokenIds);
-    });
-
-    // await section('ACCOUNT ISSUE NEW TOKEN', async () => {
-    //   console.log(await account.issuePrivacyToken({ tokenName: 'TETS', tokenSymbol: 'TTT',supplyAmount: 1000000, nativeTokenFee: 10 }));
+    // await section('ACCOUNT UNFOLLOW TOKEN', async () => {
+    //   state.importedAccount.unfollowTokenById('8fb58c65541b62a3eb8d99f62f4a9e2f8eaf99b9860f566674b3989e521594b2');
+    //   console.log(state.importedAccount.privacyTokenIds);
     // });
 
-    await section('ACCOUNT GET REWARDS', async () => {
-      console.log(await state.importedAccount.getNodeRewards());
-    });
+    // // await section('ACCOUNT ISSUE NEW TOKEN', async () => {
+    // //   console.log(await account.issuePrivacyToken({ tokenName: 'TETS', tokenSymbol: 'TTT',supplyAmount: 1000000, nativeTokenFee: 10 }));
+    // // });
 
-    await section('ACCOUNT GET NODE STATUS', async () => {
-      console.log(await state.importedAccount.getNodeStatus());
-    });
+    // await section('ACCOUNT GET REWARDS', async () => {
+    //   console.log(await state.importedAccount.getNodeRewards());
+    // });
 
-    await section('GET TX HISTORIES NATIVE TOKEN', async () => {
-      console.log(await state.importedAccount.nativeToken.getTxHistories());
-    });
+    // await section('ACCOUNT GET NODE STATUS', async () => {
+    //   console.log(await state.importedAccount.getNodeStatus());
+    // });
 
-    await section('REMOVE ACCOUNT', async () => {
-      await state.wallet.masterAccount.removeAccount('Imported acc');
-    });
+    // await section('GET TX HISTORIES NATIVE TOKEN', async () => {
+    //   console.log(await state.importedAccount.nativeToken.getTxHistories());
+    // });
+
+    // await section('REMOVE ACCOUNT', async () => {
+    //   await state.wallet.masterAccount.removeAccount('Imported acc');
+    // });
 
     console.log('SUCCESS TASKS:\n', logTask.success.join(', '));
     console.log('\nFAILED TASKS:\n', logTask.failed.map(({ label, message}) => {

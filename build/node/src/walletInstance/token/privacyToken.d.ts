@@ -1,3 +1,4 @@
+/// <reference types="bn.js" />
 import Token from "./token";
 import PrivacyTokenModel from "../../models/token/privacyToken";
 import AccountKeySetModel from "../../models/key/accountKeySet";
@@ -22,6 +23,22 @@ declare class PrivacyToken extends Token implements PrivacyTokenModel {
     hasExchangeRate(): Promise<boolean>;
     getNativeAvailableCoins(): Promise<import("../../models/coin").default[]>;
     transfer(paymentList: PaymentInfoModel[], nativeFee: number, privacyFee: number): Promise<import("../../..").TxHistoryModel>;
+    createRawTx(paymentList: PaymentInfoModel[], nativeFee: number, privacyFee: number): Promise<{
+        txInfo: {
+            b58CheckEncodeTx: string;
+            lockTime: number;
+            tokenID?: string;
+        };
+        nativeTxInput: import("../../services/tx/utils").TxInputType;
+        privacyTxInput: import("../../services/tx/utils").TxInputType;
+        nativePaymentAmountBN: import("bn.js");
+        privacyPaymentAmountBN: import("bn.js");
+        usePrivacyForPrivacyToken: boolean;
+        usePrivacyForNativeToken: boolean;
+    }>;
+    static sendRawTx(b58CheckEncodeTx: string): Promise<{
+        txId: string;
+    }>;
     burning(outchainAddress: string, burningAmount: number, nativeFee: number, privacyFee: number): Promise<import("../../..").TxHistoryModel>;
     pdeContribution(pdeContributionPairID: string, contributedAmount: number, nativeFee: number, privacyFee: number): Promise<import("../../..").TxHistoryModel>;
     requestTrade(tokenIdBuy: TokenIdType, sellAmount: number, minimumAcceptableAmount: number, nativeFee: number, privacyFee: number, tradingFee: number): Promise<import("../../..").TxHistoryModel>;

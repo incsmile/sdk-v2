@@ -1,7 +1,7 @@
 import Token from './token';
 import PrivacyTokenModel from '@src/models/token/privacyToken';
 import AccountKeySetModel from '@src/models/key/accountKeySet';
-import sendPrivacyToken, { hasExchangeRate } from '@src/services/tx/sendPrivacyToken';
+import sendPrivacyToken, { hasExchangeRate, createRawPrivacyTokenTx, sendRawPrivacyTokenTx } from '@src/services/tx/sendPrivacyToken';
 import PaymentInfoModel from '@src/models/paymentInfo';
 import sendBurningRequest from '@src/services/tx/sendBurningRequest';
 import sendPrivacyTokenPdeContribution from '@src/services/tx/sendPrivacyTokenPdeContribution';
@@ -87,6 +87,42 @@ class PrivacyToken extends Token implements PrivacyTokenModel {
       return history;
     } catch (e) {
       L.error(`Privacy token ${this.tokenId} transfered failed`, e);
+      throw e;
+    }
+  }
+
+  async createRawTx(paymentList: PaymentInfoModel[], nativeFee: number, privacyFee: number) {
+    try {
+      new Validator('paymentList', paymentList).required().paymentInfoList();
+      new Validator('nativeFee', nativeFee).required().amount();
+      new Validator('privacyFee', privacyFee).required().amount();
+  
+      L.info(`Create raw privacy token ${this.tokenId} tx`, { paymentList, nativeFee, privacyFee });
+
+      const res = await createRawPrivacyTokenTx({
+        accountKeySet: this.accountKeySet,
+        nativeAvailableCoins: await this.getNativeAvailableCoins(),
+        privacyAvailableCoins: await this.getAvailableCoins(),
+        nativeFee,
+        privacyFee,
+        privacyPaymentInfoList: paymentList,
+        tokenId: this.tokenId,
+        tokenName: this.name,
+        tokenSymbol: this.symbol,
+      });
+  
+      return res;
+    } catch (e) {
+      L.error(`Create privacy token ${this.tokenId} raw tx failed`, e);
+      throw e;
+    }
+  }
+
+  static async sendRawTx(b58CheckEncodeTx: string) {
+    try {
+      return sendRawPrivacyTokenTx(b58CheckEncodeTx);
+    } catch (e) {
+      L.error('Send Privacy token raw tx failed', e);
       throw e;
     }
   }

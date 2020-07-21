@@ -31,6 +31,18 @@ export declare function createTx({ nativeTokenFeeBN, nativePaymentAmountBN, nati
     b58CheckEncodeTx: string;
     lockTime: number;
 }>;
+export declare function createNativeTokenTx({ nativePaymentInfoList, nativeFee, accountKeySet, availableCoins }: SendParam): Promise<{
+    txInfo: {
+        b58CheckEncodeTx: string;
+        lockTime: number;
+    };
+    nativeTxInput: TxInputType;
+    nativePaymentAmountBN: bn;
+    usePrivacyForNativeToken: boolean;
+}>;
+export declare function sendRawNativeTokenTx(b58CheckEncodeTx: string): Promise<{
+    txId: string;
+}>;
 export default function sendNativeToken({ nativePaymentInfoList, nativeFee, accountKeySet, availableCoins }: SendParam): Promise<import("../../..").TxHistoryModel>;
 export {};
 //# sourceMappingURL=sendNativeToken.d.ts.map

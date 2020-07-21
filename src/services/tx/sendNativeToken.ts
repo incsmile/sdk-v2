@@ -96,7 +96,8 @@ export async function createTx({
   return (customExtractInfoFromInitedTxMethod ? customExtractInfoFromInitedTxMethod : extractInfoFromInitedTxBytes)(resInitTxBytes);
 }
 
-export default async function sendNativeToken({ nativePaymentInfoList, nativeFee = DEFAULT_NATIVE_FEE, accountKeySet, availableCoins } : SendParam) {
+
+export async function createNativeTokenTx({ nativePaymentInfoList, nativeFee = DEFAULT_NATIVE_FEE, accountKeySet, availableCoins } : SendParam) {
   new Validator('accountKeySet', accountKeySet).required();
   new Validator('availableCoins', availableCoins).required();
   new Validator('nativePaymentInfoList', nativePaymentInfoList).required().paymentInfoList();
@@ -120,7 +121,29 @@ export default async function sendNativeToken({ nativePaymentInfoList, nativeFee
   });
   console.log('txInfo', txInfo);
 
-  const sentInfo = await sendB58CheckEncodeTxToChain(rpc.sendRawTx, txInfo.b58CheckEncodeTx);
+  return {
+    txInfo,
+    nativeTxInput,
+    nativePaymentAmountBN,
+    usePrivacyForNativeToken
+  };
+}
+
+export async function sendRawNativeTokenTx(b58CheckEncodeTx: string) {
+  return await sendB58CheckEncodeTxToChain(rpc.sendRawTx, b58CheckEncodeTx);
+}
+
+export default async function sendNativeToken({ nativePaymentInfoList, nativeFee = DEFAULT_NATIVE_FEE, accountKeySet, availableCoins } : SendParam) {
+  new Validator('accountKeySet', accountKeySet).required();
+  new Validator('availableCoins', availableCoins).required();
+  new Validator('nativePaymentInfoList', nativePaymentInfoList).required().paymentInfoList();
+  new Validator('nativeFee', nativeFee).required().amount();
+
+  const { txInfo, nativePaymentAmountBN, nativeTxInput, usePrivacyForNativeToken } = await createNativeTokenTx({ nativePaymentInfoList, nativeFee, accountKeySet, availableCoins });
+
+  console.log('txInfo', txInfo);
+
+  const sentInfo = await sendRawNativeTokenTx(txInfo.b58CheckEncodeTx);
 
   // const historyInfo = createHistoryInfo({ ...sentInfo, lockTime: txInfo.lockTime });
 
