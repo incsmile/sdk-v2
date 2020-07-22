@@ -30,6 +30,9 @@ const NanoUnit = 1e-9;
 const BurnAddress =
   '15pABFiJVeh9D5uiQEhQX4SVibGGbdAVipQxBdxkmDqAJaoG1EdFKHBrNfs';
 
+const BurnAddress2 =
+'12RxahVABnAVCGP3LGwCn8jkQxgw7z1x14wztHzn455TTVpi1wBq9YGwkRMQg3J4e657AbAnCvYCJSdA9czBUNuCKwGSRQt55Xwz8WA';
+
 const BurningRequestMeta = 27;
 const WithDrawRewardRequestMeta = 44;
 const PDEContributionMeta = 90;
@@ -90,5 +93,6 @@ export {
   MenmonicWordLen,
   MaxSizeInfoCoin,
   StopAutoStakingMeta,
-  ShardNumber
+  ShardNumber,
+  BurnAddress2,
 };

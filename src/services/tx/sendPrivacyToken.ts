@@ -11,7 +11,7 @@ import AccountKeySetModel from '@src/models/key/accountKeySet';
 import CoinModel, { CoinRawData } from '@src/models/coin';
 import { PRIVACY_TOKEN_TX_TYPE, TX_TYPE, HISTORY_TYPE } from '@src/constants/tx';
 import Validator from '@src/utils/validator';
-import { BurnAddress } from '@src/constants/wallet';
+import { BurnAddress2 } from '@src/constants/wallet';
 
 interface TokenInfo {
   tokenId: TokenIdType,
@@ -266,7 +266,7 @@ export async function createRawPrivacyTokenTx({
   let usePrivacyForNativeToken = true;
 
   for (let i = 0; i < privacyPaymentInfoList.length; i++) {
-    if (privacyPaymentInfoList[i].paymentAddressStr === BurnAddress) {
+    if (privacyPaymentInfoList[i].paymentAddressStr === BurnAddress2) {
       usePrivacyForPrivacyToken = false;
       break;
     }
