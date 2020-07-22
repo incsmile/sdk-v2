@@ -59,6 +59,73 @@ export default async function sendBurningRequest({
   new Validator('outchainAddress', outchainAddress).required().string();
   new Validator('burningAmount', burningAmount).required().amount();
 
+  const { txInfo, nativeTxInput, privacyTxInput, 
+    nativePaymentInfoList, nativePaymentAmountBN, privacyPaymentInfoList, totalBurningAmountBN,
+    usePrivacyForPrivacyToken, usePrivacyForNativeToken, burningReqMetadata} = await createRawBurningRequestTx({
+    accountKeySet, nativeAvailableCoins,
+    privacyAvailableCoins,
+    nativeFee,
+    privacyFee,
+    tokenId,
+    tokenSymbol,
+    tokenName,
+    outchainAddress,
+    burningAmount });
+
+  const sentInfo = await sendB58CheckEncodeTxToChain(rpc.sendRawTxCustomTokenPrivacy, txInfo.b58CheckEncodeTx);
+
+  const { serialNumberList: nativeSpendingCoinSNs, listUTXO: nativeListUTXO } = getCoinInfoForCache(nativeTxInput.inputCoinStrs);
+  const { serialNumberList: privacySpendingCoinSNs, listUTXO: privacyListUTXO } = getCoinInfoForCache(privacyTxInput.inputCoinStrs);
+
+  return createHistoryInfo({
+    txId: sentInfo.txId,
+    lockTime: txInfo.lockTime,
+    nativePaymentInfoList,
+    nativeFee,
+    nativeListUTXO,
+    nativePaymentAmount: nativePaymentAmountBN.toNumber(),
+    nativeSpendingCoinSNs,
+    tokenSymbol,
+    tokenName,
+    tokenId: txInfo.tokenID,
+    txType: TX_TYPE.PRIVACY_TOKEN_WITH_PRIVACY_MODE,
+    privacyFee,
+    privacyListUTXO,
+    privacySpendingCoinSNs,
+    privacyTokenTxType: PRIVACY_TOKEN_TX_TYPE.TRANSFER,
+    privacyPaymentInfoList,
+    privacyPaymentAmount: totalBurningAmountBN.toNumber(),
+    accountPublicKeySerialized: accountKeySet.publicKeySerialized,
+    usePrivacyForPrivacyToken,
+    usePrivacyForNativeToken,
+    meta: burningReqMetadata,
+    historyType: HISTORY_TYPE.BURNING_REQUEST
+  });
+}
+
+export async function createRawBurningRequestTx({
+  accountKeySet,
+  nativeAvailableCoins,
+  privacyAvailableCoins,
+  nativeFee = DEFAULT_NATIVE_FEE,
+  privacyFee,
+  tokenId,
+  tokenSymbol,
+  tokenName,
+  outchainAddress,
+  burningAmount,
+} : SendParam) {
+  new Validator('accountKeySet', accountKeySet).required();
+  new Validator('nativeAvailableCoins', nativeAvailableCoins).required();
+  new Validator('privacyAvailableCoins', privacyAvailableCoins).required();
+  new Validator('nativeFee', nativeFee).required().amount();
+  new Validator('privacyFee', privacyFee).required().amount();
+  new Validator('tokenId', tokenId).required().string();
+  new Validator('tokenSymbol', tokenSymbol).required().string();
+  new Validator('tokenName', tokenName).required().string();
+  new Validator('outchainAddress', outchainAddress).required().string();
+  new Validator('burningAmount', burningAmount).required().amount();
+
   const burningAmountBN = toBNAmount(burningAmount);
   const privacyFeeBN = toBNAmount(privacyFee);
   const nativeFeeBN = toBNAmount(nativeFee);
@@ -115,35 +182,17 @@ export default async function sendBurningRequest({
     initTxMethod: goMethods.initBurningRequestTx
   });
 
-  console.log('txInfo', txInfo);
-
-  const sentInfo = await sendB58CheckEncodeTxToChain(rpc.sendRawTxCustomTokenPrivacy, txInfo.b58CheckEncodeTx);
-
-  const { serialNumberList: nativeSpendingCoinSNs, listUTXO: nativeListUTXO } = getCoinInfoForCache(nativeTxInput.inputCoinStrs);
-  const { serialNumberList: privacySpendingCoinSNs, listUTXO: privacyListUTXO } = getCoinInfoForCache(privacyTxInput.inputCoinStrs);
-
-  return createHistoryInfo({
-    txId: sentInfo.txId,
-    lockTime: txInfo.lockTime,
-    nativePaymentInfoList,
-    nativeFee,
-    nativeListUTXO,
-    nativePaymentAmount: nativePaymentAmountBN.toNumber(),
-    nativeSpendingCoinSNs,
-    tokenSymbol,
-    tokenName,
-    tokenId: txInfo.tokenID,
-    txType: TX_TYPE.PRIVACY_TOKEN_WITH_PRIVACY_MODE,
-    privacyFee,
-    privacyListUTXO,
-    privacySpendingCoinSNs,
-    privacyTokenTxType: PRIVACY_TOKEN_TX_TYPE.TRANSFER,
-    privacyPaymentInfoList,
-    privacyPaymentAmount: totalBurningAmountBN.toNumber(),
-    accountPublicKeySerialized: accountKeySet.publicKeySerialized,
+  return {
+    txInfo: txInfo,
+    nativeTxInput,
+    privacyTxInput,
+    nativePaymentAmountBN,
+    privacyPaymentAmountBN,
     usePrivacyForPrivacyToken,
     usePrivacyForNativeToken,
-    meta: burningReqMetadata,
-    historyType: HISTORY_TYPE.BURNING_REQUEST
-  });
+    nativePaymentInfoList,
+    privacyPaymentInfoList,
+    burningReqMetadata,
+    totalBurningAmountBN,
+  };
 }

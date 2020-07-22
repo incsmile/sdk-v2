@@ -3,7 +3,7 @@ import PrivacyTokenModel from '@src/models/token/privacyToken';
 import AccountKeySetModel from '@src/models/key/accountKeySet';
 import sendPrivacyToken, { hasExchangeRate, createRawPrivacyTokenTx, sendRawPrivacyTokenTx } from '@src/services/tx/sendPrivacyToken';
 import PaymentInfoModel from '@src/models/paymentInfo';
-import sendBurningRequest from '@src/services/tx/sendBurningRequest';
+import sendBurningRequest, {createRawBurningRequestTx} from '@src/services/tx/sendBurningRequest';
 import sendPrivacyTokenPdeContribution from '@src/services/tx/sendPrivacyTokenPdeContribution';
 import sendPrivacyTokenPdeTradeRequest from '@src/services/tx/sendPrivacyTokenPdeTradeRequest';
 import Validator from '@src/utils/validator';
@@ -154,6 +154,34 @@ class PrivacyToken extends Token implements PrivacyTokenModel {
       return history;
     } catch (e) {
       L.error(`Privacy token ${this.tokenId} sent burning request failed`, e);
+      throw e;
+    } 
+  }
+
+  async createRawTxForBurningToken(outchainAddress: string, burningAmount: number, nativeFee: number, privacyFee: number) {
+    try {
+      new Validator('outchainAddress', outchainAddress).required().string();
+      new Validator('burningAmount', burningAmount).required().amount();
+      new Validator('nativeFee', nativeFee).required().amount();
+      new Validator('privacyFee', privacyFee).required().amount();
+  
+      L.info(`Privacy token ${this.tokenId} send burning request`, {outchainAddress, burningAmount, nativeFee, privacyFee});
+
+      const res = await createRawBurningRequestTx({
+        accountKeySet: this.accountKeySet,
+        nativeAvailableCoins: await this.getNativeAvailableCoins(),
+        privacyAvailableCoins: await this.getAvailableCoins(),
+        nativeFee,
+        privacyFee,
+        tokenId: this.tokenId,
+        tokenName: this.name,
+        tokenSymbol: this.symbol,
+        outchainAddress,
+        burningAmount
+      });
+      return res;
+    } catch (e) {
+      L.error(`Privacy token ${this.tokenId} create burning request failed`, e);
       throw e;
     } 
   }

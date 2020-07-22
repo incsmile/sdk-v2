@@ -40,6 +40,30 @@ declare class PrivacyToken extends Token implements PrivacyTokenModel {
         txId: string;
     }>;
     burning(outchainAddress: string, burningAmount: number, nativeFee: number, privacyFee: number): Promise<import("../../..").TxHistoryModel>;
+    createRawTxForBurningToken(outchainAddress: string, burningAmount: number, nativeFee: number, privacyFee: number): Promise<{
+        txInfo: {
+            b58CheckEncodeTx: string;
+            lockTime: number;
+            tokenID?: string;
+        };
+        nativeTxInput: import("../../services/tx/utils").TxInputType;
+        privacyTxInput: import("../../services/tx/utils").TxInputType;
+        nativePaymentAmountBN: import("bn.js");
+        privacyPaymentAmountBN: import("bn.js");
+        usePrivacyForPrivacyToken: boolean;
+        usePrivacyForNativeToken: boolean;
+        nativePaymentInfoList: PaymentInfoModel[];
+        privacyPaymentInfoList: PaymentInfoModel[];
+        burningReqMetadata: {
+            BurnerAddress: string;
+            BurningAmount: number;
+            TokenID: string;
+            TokenName: string;
+            RemoteAddress: string;
+            Type: number;
+        };
+        totalBurningAmountBN: import("bn.js");
+    }>;
     pdeContribution(pdeContributionPairID: string, contributedAmount: number, nativeFee: number, privacyFee: number): Promise<import("../../..").TxHistoryModel>;
     requestTrade(tokenIdBuy: TokenIdType, sellAmount: number, minimumAcceptableAmount: number, nativeFee: number, privacyFee: number, tradingFee: number): Promise<import("../../..").TxHistoryModel>;
     /**
