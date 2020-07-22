@@ -247,6 +247,8 @@ export async function createRawPrivacyTokenTx({
   tokenSymbol,
   tokenName
 } : SendParam) {
+
+  console.log("Running createRawPrivacyTokenTx: ", createRawPrivacyTokenTx);
   new Validator('accountKeySet', accountKeySet).required();
   new Validator('nativeAvailableCoins', nativeAvailableCoins).required();
   new Validator('privacyAvailableCoins', privacyAvailableCoins).required();
@@ -265,12 +267,15 @@ export async function createRawPrivacyTokenTx({
   let usePrivacyForPrivacyToken = true;
   let usePrivacyForNativeToken = true;
 
+  console.log("privacyPaymentInfoList: ", privacyPaymentInfoList);
+
   for (let i = 0; i < privacyPaymentInfoList.length; i++) {
     if (privacyPaymentInfoList[i].paymentAddressStr === BurnAddress2) {
       usePrivacyForPrivacyToken = false;
       break;
     }
   }
+  console.log({usePrivacyForPrivacyToken});
 
   const nativeTokenFeeBN = toBNAmount(nativeFee);
   const nativePaymentAmountBN = getTotalAmountFromPaymentList(nativePaymentInfoList);
@@ -278,6 +283,8 @@ export async function createRawPrivacyTokenTx({
   const privacyPaymentAmountBN = getTotalAmountFromPaymentList(privacyPaymentInfoList);
   const nativeTxInput = await getNativeTokenTxInput(accountKeySet, nativeAvailableCoins, nativePaymentAmountBN, nativeTokenFeeBN, usePrivacyForNativeToken);
   const privacyTxInput = await getPrivacyTokenTxInput(accountKeySet, privacyAvailableCoins, tokenId, privacyPaymentAmountBN, privacyTokenFeeBN, usePrivacyForPrivacyToken);
+  console.log({usePrivacyForPrivacyToken});
+  
   const txInfo = await createTx({
     nativeTxInput,
     nativePaymentInfoList,
@@ -292,6 +299,8 @@ export async function createRawPrivacyTokenTx({
     tokenSymbol,
     tokenName,
     initTxMethod: goMethods.initPrivacyTokenTx,
+    usePrivacyForNativeToken,
+    usePrivacyForPrivacyToken,
   });
 
   return {
