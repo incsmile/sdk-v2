@@ -50,7 +50,7 @@ export async function getSpendingSerialCoins() : Promise<{spendingNativeSerialNu
   const spendingPrivacySerialNumbers: string[] = [];
 
   txHistories.forEach(txHistory => {
-    if (txHistory.status !== TX_STATUS.CONFIRMED && txHistory.status !== TX_STATUS.FAILED) {
+    if (txHistory && txHistory.status !== TX_STATUS.CONFIRMED && txHistory.status !== TX_STATUS.FAILED) {
       spendingNativeSerialNumbers.push(...txHistory.nativeTokenInfo.spendingCoinSNs || []);
       spendingPrivacySerialNumbers.push(...txHistory.privacyTokenInfo.spendingCoinSNs || []);
     }

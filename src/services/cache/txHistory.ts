@@ -15,17 +15,19 @@ export async function getTxHistoryCache() {
 
   txIds.forEach(txId => {
     const historyData: {[key: string]: any} = prevCached[txId];
-    data[txId] = new TxHistoryModel({
-      txId: historyData.txId,
-      txType: historyData.txType,
-      lockTime: historyData.lockTime,
-      status: historyData.status,
-      nativeTokenInfo: historyData.nativeTokenInfo,
-      privacyTokenInfo: historyData.privacyTokenInfo,
-      meta: historyData.meta,
-      accountPublicKeySerialized: historyData.accountPublicKeySerialized,
-      historyType: historyData.historyType
-    });
+    if (historyData) {
+      data[txId] = new TxHistoryModel({
+        txId: historyData.txId,
+        txType: historyData.txType,
+        lockTime: historyData.lockTime,
+        status: historyData.status,
+        nativeTokenInfo: historyData.nativeTokenInfo,
+        privacyTokenInfo: historyData.privacyTokenInfo,
+        meta: historyData.meta,
+        accountPublicKeySerialized: historyData.accountPublicKeySerialized,
+        historyType: historyData.historyType
+      });
+    }
   });
 
   return data;

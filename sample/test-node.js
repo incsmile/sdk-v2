@@ -155,21 +155,21 @@ async function main() {
     //   }
     // });
 
-    await section('CREATE RAW PRIVACY TOKEN TX', async () => {
-      if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
-        const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTx([
-          {
-            paymentAddressStr: '12RxahVABnAVCGP3LGwCn8jkQxgw7z1x14wztHzn455TTVpi1wBq9YGwkRMQg3J4e657AbAnCvYCJSdA9czBUNuCKwGSRQt55Xwz8WA',
-            amount: 10,
-            message: ''
-          }
-        ], 10, 0);
+    // await section('CREATE RAW PRIVACY TOKEN TX', async () => {
+    //   if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
+    //     const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTx([
+    //       {
+    //         paymentAddressStr: '12RxahVABnAVCGP3LGwCn8jkQxgw7z1x14wztHzn455TTVpi1wBq9YGwkRMQg3J4e657AbAnCvYCJSdA9czBUNuCKwGSRQt55Xwz8WA',
+    //         amount: 10,
+    //         message: ''
+    //       }
+    //     ], 10, 0);
   
-        // send raw tx
-        // const txInfo = await incognito.PrivacyTokenInstance.sendRawTx(b58CheckEncodeTx);
-        // console.log('Send raw data', txInfo);
-      }
-    });
+    //     // send raw tx
+    //     // const txInfo = await incognito.PrivacyTokenInstance.sendRawTx(b58CheckEncodeTx);
+    //     // console.log('Send raw data', txInfo);
+    //   }
+    // });
 
     await section('CREATE RAW PRIVACY TOKEN TX', async () => {
       if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
