@@ -3,7 +3,7 @@
 import { getKeyBytes } from "./key";
 import { PaymentAddressType, PriKeyType } from "@src/constants/wallet";
 
-function isPaymentAddress(paymentAddrStr: string) {
+export function isPaymentAddress(paymentAddrStr: string) {
   try {
     const { keyType } = getKeyBytes(paymentAddrStr);
 
@@ -17,7 +17,7 @@ function isPaymentAddress(paymentAddrStr: string) {
   return false;
 }
 
-function isPrivateKey(privateKeyStr: string) {
+export function isPrivateKey(privateKeyStr: string) {
   try {
     const { keyType } = getKeyBytes(privateKeyStr);
 

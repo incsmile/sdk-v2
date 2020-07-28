@@ -1,3 +1,5 @@
+export declare function isPaymentAddress(paymentAddrStr: string): boolean;
+export declare function isPrivateKey(privateKeyStr: string): boolean;
 declare class Validator {
     value: any;
     label: string;

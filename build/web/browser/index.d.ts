@@ -16,7 +16,7 @@ export { default as PaymentInfoModel } from "./src/models/paymentInfo";
 export { default as storageService } from "./src/services/storage";
 export { default as TxHistoryModel } from "./src/models/txHistory";
 export { setConfig, getConfig } from "./src/config";
-export { default as Validator } from "./src/utils/validator";
+export { default as Validator, isPaymentAddress, isPrivateKey } from "./src/utils/validator";
 export declare const historyServices: {
     checkCachedHistories: typeof checkCachedHistories;
     getTxHistoryByPublicKey: typeof getTxHistoryByPublicKey;
