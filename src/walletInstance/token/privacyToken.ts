@@ -13,6 +13,7 @@ import { genETHDepositAddress, genERC20DepositAddress, genCentralizedDepositAddr
 import { getBridgeHistory } from '@src/services/bridge/history';
 import { genCentralizedWithdrawAddress, updatePTokenFee, addETHTxWithdraw, addERC20TxWithdraw } from '@src/services/bridge/withdraw';
 import { convertDecimalToNanoAmount } from '@src/utils/common';
+import { BurningRequestMeta, BurningRequestDepositToSCMeta } from '@src/constants/wallet';
 
 interface PrivacyTokenParam {
   privacyTokenApi: PrivacyTokenApiModel,
@@ -146,7 +147,8 @@ class PrivacyToken extends Token implements PrivacyTokenModel {
         tokenName: this.name,
         tokenSymbol: this.symbol,
         outchainAddress,
-        burningAmount
+        burningAmount,
+        metaType: BurningRequestMeta,
       });
   
       L.info(`Privacy token ${this.tokenId} send burning request successfully with tx id ${history.txId}`);
@@ -177,11 +179,41 @@ class PrivacyToken extends Token implements PrivacyTokenModel {
         tokenName: this.name,
         tokenSymbol: this.symbol,
         outchainAddress,
-        burningAmount
+        burningAmount,
+        metaType: BurningRequestMeta,
       });
       return res;
     } catch (e) {
       L.error(`Privacy token ${this.tokenId} create burning request failed`, e);
+      throw e;
+    } 
+  }
+
+  async createRawTxForBurningDepositToSCRequest(outchainAddress: string, burningAmount: number, nativeFee: number, privacyFee: number) {
+    try {
+      new Validator('outchainAddress', outchainAddress).required().string();
+      new Validator('burningAmount', burningAmount).required().amount();
+      new Validator('nativeFee', nativeFee).required().amount();
+      new Validator('privacyFee', privacyFee).required().amount();
+  
+      L.info(`Privacy token ${this.tokenId} send burning request despoit to smart contract`, {outchainAddress, burningAmount, nativeFee, privacyFee});
+
+      const res = await createRawBurningRequestTx({
+        accountKeySet: this.accountKeySet,
+        nativeAvailableCoins: await this.getNativeAvailableCoins(),
+        privacyAvailableCoins: await this.getAvailableCoins(),
+        nativeFee,
+        privacyFee,
+        tokenId: this.tokenId,
+        tokenName: this.name,
+        tokenSymbol: this.symbol,
+        outchainAddress,
+        burningAmount,
+        metaType: BurningRequestDepositToSCMeta,
+      });
+      return res;
+    } catch (e) {
+      L.error(`Privacy token ${this.tokenId} create burning request deposit to smart contract failed`, e);
       throw e;
     } 
   }

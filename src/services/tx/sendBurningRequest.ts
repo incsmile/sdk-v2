@@ -6,7 +6,6 @@ import CoinModel from '@src/models/coin';
 import goMethods from '@src/go';
 import { PRIVACY_TOKEN_TX_TYPE, TX_TYPE, HISTORY_TYPE } from '@src/constants/tx';
 import { createTx } from './sendPrivacyToken';
-import { BurningRequestMeta } from '@src/constants/wallet';
 import Validator from '@src/utils/validator';
 import { DEFAULT_NATIVE_FEE } from '@src/constants/constants';
 
@@ -23,7 +22,8 @@ interface SendParam extends TokenInfo {
   nativeFee: number,
   privacyFee: number,
   outchainAddress: string,
-  burningAmount: number
+  burningAmount: number,
+  metaType: number,
 };
 
 function parseOutchainAddress(outchainAddress: string) {
@@ -47,6 +47,7 @@ export default async function sendBurningRequest({
   tokenName,
   outchainAddress,
   burningAmount,
+  metaType,
 } : SendParam) {
   new Validator('accountKeySet', accountKeySet).required();
   new Validator('nativeAvailableCoins', nativeAvailableCoins).required();
@@ -70,7 +71,8 @@ export default async function sendBurningRequest({
     tokenSymbol,
     tokenName,
     outchainAddress,
-    burningAmount });
+    burningAmount,
+    metaType });
 
   const sentInfo = await sendB58CheckEncodeTxToChain(rpc.sendRawTxCustomTokenPrivacy, txInfo.b58CheckEncodeTx);
 
@@ -114,6 +116,7 @@ export async function createRawBurningRequestTx({
   tokenName,
   outchainAddress,
   burningAmount,
+  metaType
 } : SendParam) {
   new Validator('accountKeySet', accountKeySet).required();
   new Validator('nativeAvailableCoins', nativeAvailableCoins).required();
@@ -160,7 +163,7 @@ export async function createRawBurningRequestTx({
     TokenID: tokenId,
     TokenName: tokenName,
     RemoteAddress: outchainAddressParsed,
-    Type: BurningRequestMeta
+    Type: metaType
   };
 
   const txInfo = await createTx({

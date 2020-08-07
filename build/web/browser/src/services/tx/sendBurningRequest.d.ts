@@ -15,9 +15,10 @@ interface SendParam extends TokenInfo {
     privacyFee: number;
     outchainAddress: string;
     burningAmount: number;
+    metaType: number;
 }
-export default function sendBurningRequest({ accountKeySet, nativeAvailableCoins, privacyAvailableCoins, nativeFee, privacyFee, tokenId, tokenSymbol, tokenName, outchainAddress, burningAmount, }: SendParam): Promise<import("../../..").TxHistoryModel>;
-export declare function createRawBurningRequestTx({ accountKeySet, nativeAvailableCoins, privacyAvailableCoins, nativeFee, privacyFee, tokenId, tokenSymbol, tokenName, outchainAddress, burningAmount, }: SendParam): Promise<{
+export default function sendBurningRequest({ accountKeySet, nativeAvailableCoins, privacyAvailableCoins, nativeFee, privacyFee, tokenId, tokenSymbol, tokenName, outchainAddress, burningAmount, metaType, }: SendParam): Promise<import("../../..").TxHistoryModel>;
+export declare function createRawBurningRequestTx({ accountKeySet, nativeAvailableCoins, privacyAvailableCoins, nativeFee, privacyFee, tokenId, tokenSymbol, tokenName, outchainAddress, burningAmount, metaType }: SendParam): Promise<{
     txInfo: {
         b58CheckEncodeTx: string;
         lockTime: number;

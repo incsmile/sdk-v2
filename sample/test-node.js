@@ -171,9 +171,25 @@ async function main() {
     //   }
     // });
 
+    // await section('CREATE RAW PRIVACY TOKEN TX', async () => {
+    //   if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
+    //     const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTxForBurningToken(
+    //       "ea4ac6793ea32b8eae6e18afd5bdeeb7d15487d504f3a9de81ca75398ea8b6ce",
+    //       100,
+    //       10,
+    //       0,
+    //      );
+    //      console.log({b58CheckEncodeTx});
+  
+    //     // send raw tx
+    //     // const txInfo = await incognito.PrivacyTokenInstance.sendRawTx(b58CheckEncodeTx);
+    //     // console.log('Send raw data', txInfo);
+    //   }
+    // });
+
     await section('CREATE RAW PRIVACY TOKEN TX', async () => {
       if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
-        const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTxForBurningToken(
+        const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTxForBurningDepositToSCRequest(
           "ea4ac6793ea32b8eae6e18afd5bdeeb7d15487d504f3a9de81ca75398ea8b6ce",
           100,
           10,
