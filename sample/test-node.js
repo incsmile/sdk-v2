@@ -85,17 +85,20 @@ async function main() {
       state.importedAccount = await state.wallet.masterAccount.importAccount('Imported acc', '112t8ro4JyjNxs1JtGt4HG9s39wY9QDz61H8tXuo28Ufb9HE9Pshqc8pdChjAs8BXEzkam3PaJc7yHfmYJVsc5NG47eTijME4RqfS9JcR1u9');
       console.log(state.importedAccount);
 
+      let newAccount = await state.wallet.masterAccount.importAccount('new acc', '112t8rnjeorQyyy36Vz5cqtfQNoXuM7M2H92eEvLWimiAtnQCSZiP2HXpMW7mECSRXeRrP8yPwxKGuziBvGVfmxhQJSt2KqHAPZvYmM1ZKwR');
+      console.log(state.importedAccount);
+
       
 
-      // await section('TRANSFER NATIVE TOKEN', async () => {
-      //   console.log(await account.nativeToken.transfer([
-      //     {
-      //       paymentAddressStr: newAccount.key.keySet.paymentAddressKeySerialized,
-      //       amount: 10,
-      //       message: ''
-      //     }
-      //   ], 10));
-      // });
+      await section('TRANSFER NATIVE TOKEN', async () => {
+        console.log(await state.importedAccount.nativeToken.transfer([
+          {
+            paymentAddressStr: newAccount.key.keySet.paymentAddressKeySerialized,
+            amount: 1000,
+            message: ''
+          }
+        ], 10));
+      });
     });
 
     // await section('CREATE RAW NATIVE TOKEN TX', async () => {
@@ -130,10 +133,10 @@ async function main() {
     //   console.log(tokens);
     // });
 
-    await section('ACCOUNT GET TOKEN WITH ID', async () => {
-      state.privacyToken = await state.importedAccount.getFollowingPrivacyToken('ffd8d42dc40a8d166ea4848baf8b5f6e9fe0e9c30d60062eb7d44a8df9e00854');
-      console.log(state.privacyToken);
-    });
+    // await section('ACCOUNT GET TOKEN WITH ID', async () => {
+    //   state.privacyToken = await state.importedAccount.getFollowingPrivacyToken('ffd8d42dc40a8d166ea4848baf8b5f6e9fe0e9c30d60062eb7d44a8df9e00854');
+    //   console.log(state.privacyToken);
+    // });
 
     // await section('GET TOTAL BALANCE PRIVACY TOKEN', async () => {
     //   console.log((await state.privacyToken.getTotalBalance()).toNumber());
@@ -187,21 +190,21 @@ async function main() {
     //   }
     // });
 
-    await section('CREATE RAW PRIVACY TOKEN TX', async () => {
-      if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
-        const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTxForBurningDepositToSCRequest(
-          "ea4ac6793ea32b8eae6e18afd5bdeeb7d15487d504f3a9de81ca75398ea8b6ce",
-          100,
-          10,
-          0,
-         );
-         console.log({b58CheckEncodeTx});
+    // await section('CREATE RAW PRIVACY TOKEN TX', async () => {
+    //   if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
+    //     const { txInfo: { b58CheckEncodeTx } } = await state.privacyToken.createRawTxForBurningDepositToSCRequest(
+    //       "ea4ac6793ea32b8eae6e18afd5bdeeb7d15487d504f3a9de81ca75398ea8b6ce",
+    //       100,
+    //       10,
+    //       0,
+    //      );
+    //      console.log({b58CheckEncodeTx});
   
-        // send raw tx
-        // const txInfo = await incognito.PrivacyTokenInstance.sendRawTx(b58CheckEncodeTx);
-        // console.log('Send raw data', txInfo);
-      }
-    });
+    //     // send raw tx
+    //     // const txInfo = await incognito.PrivacyTokenInstance.sendRawTx(b58CheckEncodeTx);
+    //     // console.log('Send raw data', txInfo);
+    //   }
+    // });
 
     // await section('ACCOUNT UNFOLLOW TOKEN', async () => {
     //   state.importedAccount.unfollowTokenById('8fb58c65541b62a3eb8d99f62f4a9e2f8eaf99b9860f566674b3989e521594b2');

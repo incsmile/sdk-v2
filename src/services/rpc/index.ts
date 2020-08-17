@@ -461,6 +461,14 @@ class RpcClient {
 
       return result;
     }
+
+    getTimeNode = async () => {
+      const result: any = await sendRequest(
+        'getnetworkinfo', ""
+      );
+
+      return result.NodeTime;
+    }
 }
 
 export default new RpcClient();

@@ -91,6 +91,7 @@ declare class RpcClient {
     }>;
     getListPrivacyCustomTokenBalance: (privateKey: any) => Promise<any>;
     getBurningAddress: (beaconHeight?: number) => Promise<any>;
+    getTimeNode: () => Promise<any>;
 }
 declare const _default: RpcClient;
 export default _default;

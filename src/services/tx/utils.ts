@@ -230,10 +230,14 @@ export async function createOutputCoin(totalAmountToTransferBN: bn, totalAmountT
     numberOutput++;
   }
 
+  console.log("numberOutput: ", numberOutput);
+
   const sndOutputs: string[] = new Array(numberOutput);
 
   if (numberOutput > 0) {
-    const sndOutputStrs = await goMethods.randomScalars(numberOutput);
+    const sndOutputStrs = goMethods.randomScalars(numberOutput.toString());
+    console.log("sndOutputStrs: ", sndOutputStrs);
+    console.log("goMethods.randomScalars: ", goMethods.randomScalars);
     if (sndOutputStrs === null || sndOutputStrs === '') {
       throw new ErrorCode('Can not random scalars for output coins');
     }
