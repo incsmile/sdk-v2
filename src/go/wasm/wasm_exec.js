@@ -31,9 +31,10 @@
   if (!global.fs && global.require) {
     console.log("global.fs 1 : ", global.fs);
     global.fs = require('fs');
+    console.log("global.fs 1.2 : ", global.fs);
   }
 
-  if (!global.fs) {
+  if (!global.fs || (global.fs && !global.fs.writeSync)) {
     console.log("global.fs 2 : ", global.fs);
     let outputBuf = '';
     global.fs = {
