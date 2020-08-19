@@ -41,6 +41,8 @@ function getMethod(methodName: string) {
     func = (global as { [key: string]: any })[methodName];
   }
 
+  console.log("Func getMethod: ", func);
+
   // then, cache it
   if (typeof func === 'function') {
     if (requiredTimeFuncName.includes(methodName)) {
