@@ -26,11 +26,15 @@
     global.require = require;
   }
 
+  console.log("global.fs 0 : ", global.fs);
+
   if (!global.fs && global.require) {
+    console.log("global.fs 1 : ", global.fs);
     global.fs = require('fs');
   }
 
   if (!global.fs) {
+    console.log("global.fs 2 : ", global.fs);
     let outputBuf = '';
     global.fs = {
       constants: { O_WRONLY: -1, O_RDWR: -1, O_CREAT: -1, O_TRUNC: -1, O_APPEND: -1, O_EXCL: -1 }, // unused
@@ -64,6 +68,7 @@
         callback(null);
       },
     };
+    console.log("global.fs 3 : ", global.fs);
   }
 
   if (!global.crypto) {
