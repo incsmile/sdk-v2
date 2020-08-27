@@ -8,24 +8,28 @@ export async function implementGoMethodUseWasm() {
   });
 }
 
+
+
 const requiredTimeFuncName = [
   'initPrivacyTx',
-  'stopAutoStaking',
-  'staking',
-  'initPrivacyTokenTx',
-  'initBurningRequestTx',
-  'initWithdrawRewardTx',
-  'initPRVContributionTx',
-  'initPTokenContributionTx',
-  'initPRVTradeTx',
-  'initPTokenTradeTx',
-  'withdrawDexTx',
+'stopAutoStaking',
+'staking',
+'initPrivacyTokenTx',
+'initBurningRequestTx',
+'initWithdrawRewardTx',
+'initPRVContributionTx',
+'initPTokenContributionTx',
+'initPRVTradeTx',
+'initPTokenTradeTx',
+'withdrawDexTx',
 ];
 
 
 async function getTimeNode() {
   return rpc.getTimeNode();
 }
+
+
 
 function getMethod(methodName: string) {
   let func;

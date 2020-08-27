@@ -13,7 +13,7 @@ import { genETHDepositAddress, genERC20DepositAddress, genCentralizedDepositAddr
 import { getBridgeHistory } from '@src/services/bridge/history';
 import { genCentralizedWithdrawAddress, updatePTokenFee, addETHTxWithdraw, addERC20TxWithdraw } from '@src/services/bridge/withdraw';
 import { convertDecimalToNanoAmount } from '@src/utils/common';
-import { BurningRequestMetaV2, BurningRequestDepositToSCMetaV2 } from '@src/constants/wallet';
+import { BurningRequestMeta, BurningRequestDepositToSCMeta } from '@src/constants/wallet';
 
 interface PrivacyTokenParam {
   privacyTokenApi: PrivacyTokenApiModel,
@@ -148,7 +148,7 @@ class PrivacyToken extends Token implements PrivacyTokenModel {
         tokenSymbol: this.symbol,
         outchainAddress,
         burningAmount,
-        metaType: BurningRequestMetaV2,
+        metaType: BurningRequestMeta,
       });
   
       L.info(`Privacy token ${this.tokenId} send burning request successfully with tx id ${history.txId}`);
@@ -180,7 +180,7 @@ class PrivacyToken extends Token implements PrivacyTokenModel {
         tokenSymbol: this.symbol,
         outchainAddress,
         burningAmount,
-        metaType: BurningRequestMetaV2,
+        metaType: BurningRequestMeta,
       });
       return res;
     } catch (e) {
@@ -209,7 +209,7 @@ class PrivacyToken extends Token implements PrivacyTokenModel {
         tokenSymbol: this.symbol,
         outchainAddress,
         burningAmount,
-        metaType: BurningRequestDepositToSCMetaV2,
+        metaType: BurningRequestDepositToSCMeta,
       });
       return res;
     } catch (e) {
