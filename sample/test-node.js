@@ -82,23 +82,23 @@ async function main() {
     // });
 
     await section('IMPORT ACCOUNT', async () => {
-      state.importedAccount = await state.wallet.masterAccount.importAccount('Imported acc', '112t8ro4JyjNxs1JtGt4HG9s39wY9QDz61H8tXuo28Ufb9HE9Pshqc8pdChjAs8BXEzkam3PaJc7yHfmYJVsc5NG47eTijME4RqfS9JcR1u9');
+      state.importedAccount = await state.wallet.masterAccount.importAccount('Imported acc', '');
       console.log(state.importedAccount);
 
-      let newAccount = await state.wallet.masterAccount.importAccount('new acc', '112t8rnjeorQyyy36Vz5cqtfQNoXuM7M2H92eEvLWimiAtnQCSZiP2HXpMW7mECSRXeRrP8yPwxKGuziBvGVfmxhQJSt2KqHAPZvYmM1ZKwR');
-      console.log(state.importedAccount);
+      // let newAccount = await state.wallet.masterAccount.importAccount('new acc', '112t8rnjeorQyyy36Vz5cqtfQNoXuM7M2H92eEvLWimiAtnQCSZiP2HXpMW7mECSRXeRrP8yPwxKGuziBvGVfmxhQJSt2KqHAPZvYmM1ZKwR');
+      // console.log(state.importedAccount);
 
       
 
-      await section('TRANSFER NATIVE TOKEN', async () => {
-        console.log(await state.importedAccount.nativeToken.transfer([
-          {
-            paymentAddressStr: newAccount.key.keySet.paymentAddressKeySerialized,
-            amount: 1000,
-            message: ''
-          }
-        ], 10));
-      });
+      // await section('TRANSFER NATIVE TOKEN', async () => {
+      //   console.log(await state.importedAccount.nativeToken.transfer([
+      //     {
+      //       paymentAddressStr: newAccount.key.keySet.paymentAddressKeySerialized,
+      //       amount: 1000,
+      //       message: ''
+      //     }
+      //   ], 10));
+      // });
     });
 
     // await section('CREATE RAW NATIVE TOKEN TX', async () => {
@@ -133,30 +133,30 @@ async function main() {
     //   console.log(tokens);
     // });
 
-    // await section('ACCOUNT GET TOKEN WITH ID', async () => {
-    //   state.privacyToken = await state.importedAccount.getFollowingPrivacyToken('ffd8d42dc40a8d166ea4848baf8b5f6e9fe0e9c30d60062eb7d44a8df9e00854');
-    //   console.log(state.privacyToken);
-    // });
+    await section('ACCOUNT GET TOKEN WITH ID', async () => {
+      state.privacyToken = await state.importedAccount.getFollowingPrivacyToken('a0a22d131bbfdc892938542f0dbe1a7f2f48e16bc46bf1c5404319335dc1f0df');
+      console.log(state.privacyToken);
+    });
 
-    // await section('GET TOTAL BALANCE PRIVACY TOKEN', async () => {
-    //   console.log((await state.privacyToken.getTotalBalance()).toNumber());
-    // });
+    await section('GET TOTAL BALANCE PRIVACY TOKEN', async () => {
+      console.log((await state.privacyToken.getTotalBalance()).toNumber());
+    });
 
     // await section('GET AVAILABALE BALANCE PRIVACY TOKEN', async () => {
     //   console.log((await state.privacyToken.getAvaiableBalance()).toNumber());
     // });
 
-    // await section('TRANSFER PRIVACY TOKEN', async () => {
-    //   if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
-    //     console.log(await state.privacyToken.transfer([
-    //       {
-    //         paymentAddressStr: state.newAccount.key.keySet.paymentAddressKeySerialized,
-    //         amount: 10,
-    //         message: ''
-    //       }
-    //     ], 10, 0));
-    //   }
-    // });
+    await section('TRANSFER PRIVACY TOKEN', async () => {
+      if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
+        console.log(await state.privacyToken.transfer([
+          {
+            paymentAddressStr: state.importedAccount.key.keySet.paymentAddressKeySerialized,
+            amount: 10,
+            message: ''
+          }
+        ], 10, 0));
+      }
+    });
 
     // await section('CREATE RAW PRIVACY TOKEN TX', async () => {
     //   if (state.privacyToken instanceof incognito.PrivacyTokenInstance) {
@@ -211,9 +211,9 @@ async function main() {
     //   console.log(state.importedAccount.privacyTokenIds);
     // });
 
-    // // await section('ACCOUNT ISSUE NEW TOKEN', async () => {
-    // //   console.log(await account.issuePrivacyToken({ tokenName: 'TETS', tokenSymbol: 'TTT',supplyAmount: 1000000, nativeTokenFee: 10 }));
-    // // });
+    // await section('ACCOUNT ISSUE NEW TOKEN', async () => {
+    //   console.log(await state.importedAccount.issuePrivacyToken({ tokenName: 'TETS', tokenSymbol: 'TTT',supplyAmount: 100000000, nativeTokenFee: 10 }));
+    // });
 
     // await section('ACCOUNT GET REWARDS', async () => {
     //   console.log(await state.importedAccount.getNodeRewards());

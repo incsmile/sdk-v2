@@ -42,9 +42,9 @@ interface PrivacyTokenParam {
     propertyID?: TokenIdType;
     propertyName?: TokenNameType;
     propertySymbol?: TokenSymbolType;
-    amount?: number;
+    amount?: string;
     tokenTxType?: TokenTxType;
-    fee?: number;
+    fee?: string;
     paymentInfoForPToken?: PaymentInfoModel[];
     tokenInputs?: CoinRawData[];
 }

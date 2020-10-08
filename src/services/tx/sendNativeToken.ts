@@ -1,5 +1,5 @@
 import bn from 'bn.js';
-import { getTotalAmountFromPaymentList, createOutputCoin, TxInputType, initTx, getNativeTokenTxInput, toBNAmount, sendB58CheckEncodeTxToChain, getCoinInfoForCache, createHistoryInfo } from './utils';
+import { getTotalAmountFromPaymentList, createOutputCoin, TxInputType, initTx, getNativeTokenTxInput, toBNAmount, sendB58CheckEncodeTxToChain, getCoinInfoForCache, createHistoryInfo, convertAmountPaymentInfoToString } from './utils';
 import rpc from '@src/services/rpc';
 import { base64Decode } from '@src/privacy/utils';
 import { checkEncode } from '@src/utils/base58';
@@ -71,9 +71,9 @@ export async function createTx({
 
   const paramInitTx = {
     senderSK: privateKeySerialized,
-    paramPaymentInfos: nativePaymentInfoList,
+    paramPaymentInfos: convertAmountPaymentInfoToString(nativePaymentInfoList),
     inputCoinStrs: nativeTxInput.inputCoinStrs.map(coin => coin.toJson()),
-    fee: nativeTokenFeeBN.toNumber(),
+    fee: nativeTokenFeeBN.toString(),
     isPrivacy: usePrivacyForNativeToken,
     tokenID: <string>null,
     metaData,

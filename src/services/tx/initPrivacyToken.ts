@@ -76,7 +76,7 @@ export default async function initPrivacyToken({
     usePrivacyForNativeToken,
     initTxMethod: goMethods.initPrivacyTokenTx,
     privacyTokenParamAdditional: {
-      amount: supplyAmount,
+      amount: supplyAmount.toString(),
       tokenTxType: PRIVACY_TOKEN_TX_TYPE.INIT,
     },
   });

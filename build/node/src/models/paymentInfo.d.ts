@@ -6,7 +6,7 @@ interface PaymentInfoModelParam {
 }
 declare class PaymentInfoModel extends BaseModel {
     paymentAddressStr: string;
-    amount: number;
+    amount: number | string;
     message: string;
     constructor({ paymentAddress, amount, message }: PaymentInfoModelParam);
 }

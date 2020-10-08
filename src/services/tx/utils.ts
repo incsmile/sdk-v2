@@ -365,3 +365,10 @@ export async function getBurningAddress(beaconHeight = 0){
 
   return burningAddress;
 }
+
+export function convertAmountPaymentInfoToString(paymentInfo: PaymentInfoModel[]) {
+  return paymentInfo.map(pi => ({
+    ...pi,
+    amount: pi.amount.toString()
+  }))
+}

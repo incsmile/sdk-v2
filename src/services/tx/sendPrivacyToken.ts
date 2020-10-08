@@ -1,5 +1,5 @@
 import bn from 'bn.js';
-import { getTotalAmountFromPaymentList, createOutputCoin, TxInputType, initTx, getNativeTokenTxInput, toBNAmount, sendB58CheckEncodeTxToChain, getCoinInfoForCache, getPrivacyTokenTxInput, createHistoryInfo } from './utils';
+import { getTotalAmountFromPaymentList, createOutputCoin, TxInputType, initTx, getNativeTokenTxInput, toBNAmount, sendB58CheckEncodeTxToChain, getCoinInfoForCache, getPrivacyTokenTxInput, createHistoryInfo, convertAmountPaymentInfoToString } from './utils';
 import rpc from '@src/services/rpc';
 import { base64Decode } from '@src/privacy/utils';
 import { checkEncode } from '@src/utils/base58';
@@ -51,9 +51,9 @@ interface PrivacyTokenParam {
   propertyID?: TokenIdType,
   propertyName?: TokenNameType,
   propertySymbol?: TokenSymbolType,
-  amount?: number,
+  amount?: string,
   tokenTxType?: TokenTxType,
-  fee?: number,
+  fee?: string,
   paymentInfoForPToken?: PaymentInfoModel[],
   tokenInputs?: CoinRawData[]
 };
@@ -123,10 +123,10 @@ export async function createTx({
     propertyID: tokenId,
     propertyName: tokenName,
     propertySymbol: tokenSymbol,
-    amount: 0,
+    amount: '0',
     tokenTxType: PRIVACY_TOKEN_TX_TYPE.TRANSFER,
-    fee: privacyTokenFeeBN.toNumber(),
-    paymentInfoForPToken: privacyPaymentInfoList,
+    fee: privacyTokenFeeBN.toString(),
+    paymentInfoForPToken: convertAmountPaymentInfoToString(privacyPaymentInfoList),
     tokenInputs: privacyTxInput.inputCoinStrs.map(coin => coin.toJson()),
     ...privacyTokenParamAdditional
   };
@@ -134,9 +134,9 @@ export async function createTx({
   const paramInitTx = {
     privacyTokenParam,
     senderSK: privateKeySerialized,
-    paramPaymentInfos: nativePaymentInfoList || [],
+    paramPaymentInfos: convertAmountPaymentInfoToString(nativePaymentInfoList || []),
     inputCoinStrs: nativeTxInput.inputCoinStrs.map(coin => coin.toJson()),
-    fee: nativeTokenFeeBN.toNumber(),
+    fee: nativeTokenFeeBN.toString(),
     isPrivacy: usePrivacyForNativeToken,
     isPrivacyForPToken: usePrivacyForPrivacyToken,
     metaData,
