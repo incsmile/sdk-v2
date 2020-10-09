@@ -57,7 +57,7 @@ export default async function sendStakingRequest({
     Type: MetaStakingShard,
     FunderPaymentAddress: candidateAccountKeySet.paymentAddressKeySerialized,
     RewardReceiverPaymentAddress: rewardReceiverPaymentAddress,
-    StakingAmountShard: stakingAmountBN.toNumber(),
+    StakingAmountShard: stakingAmountBN.toString(),
     CommitteePublicKey: committeeKey,
     AutoReStaking: autoReStaking,
   };

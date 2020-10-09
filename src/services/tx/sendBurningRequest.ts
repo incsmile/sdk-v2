@@ -159,7 +159,7 @@ export async function createRawBurningRequestTx({
 
   const burningReqMetadata = {
     BurnerAddress: accountKeySet.paymentAddressKeySerialized,
-    BurningAmount: totalBurningAmountBN.toNumber(),
+    BurningAmount: totalBurningAmountBN.toString(),
     TokenID: tokenId,
     TokenName: tokenName,
     RemoteAddress: outchainAddressParsed,

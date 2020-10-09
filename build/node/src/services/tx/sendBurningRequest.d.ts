@@ -34,7 +34,7 @@ export declare function createRawBurningRequestTx({ accountKeySet, nativeAvailab
     privacyPaymentInfoList: PaymentInfoModel[];
     burningReqMetadata: {
         BurnerAddress: string;
-        BurningAmount: number;
+        BurningAmount: string;
         TokenID: string;
         TokenName: string;
         RemoteAddress: string;

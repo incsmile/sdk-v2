@@ -62,11 +62,11 @@ export default async function sendNativeTokenPdeTradeRequest({
   const metaData =  {
     TokenIDToBuyStr: tokenIdBuy,
     TokenIDToSellStr: tokenIdSell,
-    SellAmount: sellAmountBN.toNumber(),
+    SellAmount: sellAmountBN.toString(),
     TraderAddressStr: accountKeySet.paymentAddressKeySerialized,
     Type: PDETradeRequestMeta,
-    MinAcceptableAmount: minimumAcceptableAmountBN.toNumber(),
-    TradingFee: tradingFeeBN.toNumber()
+    MinAcceptableAmount: minimumAcceptableAmountBN.toString(),
+    TradingFee: tradingFeeBN.toString()
   };
   
   const txInfo = await createTx({

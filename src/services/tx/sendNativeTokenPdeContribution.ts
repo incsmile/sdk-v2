@@ -54,7 +54,7 @@ export default async function sendNativeTokenPdeContribution({
   const metaData =  {
     PDEContributionPairID: pdeContributionPairID,
     ContributorAddressStr: accountKeySet.paymentAddressKeySerialized,
-    ContributedAmount: contributedAmount,
+    ContributedAmount: contributedAmount.toString(),
     TokenIDStr: tokenId,
     Type: PDEContributionMeta
   };

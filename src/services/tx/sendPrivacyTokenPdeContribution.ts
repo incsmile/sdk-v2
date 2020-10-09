@@ -73,7 +73,7 @@ export default async function sendPrivacyTokenPdeContribution({
   const metaData = {
     PDEContributionPairID: pdeContributionPairID,
     ContributorAddressStr: accountKeySet.paymentAddressKeySerialized,
-    ContributedAmount: contributedAmount,
+    ContributedAmount: contributedAmount.toString(),
     TokenIDStr: tokenId,
     Type: PDEContributionMeta
   };

@@ -56,7 +56,7 @@ declare class PrivacyToken extends Token implements PrivacyTokenModel {
         privacyPaymentInfoList: PaymentInfoModel[];
         burningReqMetadata: {
             BurnerAddress: string;
-            BurningAmount: number;
+            BurningAmount: string;
             TokenID: string;
             TokenName: string;
             RemoteAddress: string;
@@ -80,7 +80,7 @@ declare class PrivacyToken extends Token implements PrivacyTokenModel {
         privacyPaymentInfoList: PaymentInfoModel[];
         burningReqMetadata: {
             BurnerAddress: string;
-            BurningAmount: number;
+            BurningAmount: string;
             TokenID: string;
             TokenName: string;
             RemoteAddress: string;

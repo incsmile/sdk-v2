@@ -81,11 +81,11 @@ export default async function sendPrivacyTokenPdeTradeRequest({
   const metaData = {
     TokenIDToBuyStr: tokenIdBuy,
     TokenIDToSellStr: tokenId,
-    SellAmount: sellAmountBN.toNumber(),
+    SellAmount: sellAmountBN.toString(),
     TraderAddressStr: accountKeySet.paymentAddressKeySerialized,
     Type: PDETradeRequestMeta,
-    MinAcceptableAmount: minimumAcceptableAmountBN.toNumber(),
-    TradingFee: tradingFeeBN.toNumber()
+    MinAcceptableAmount: minimumAcceptableAmountBN.toString(),
+    TradingFee: tradingFeeBN.toString()
   };
 
   const txInfo = await createTx({

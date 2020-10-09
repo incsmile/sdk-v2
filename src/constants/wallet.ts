@@ -38,11 +38,11 @@ const BurningRequestMetaV2  = 240;
 const BurningRequestDepositToSCMeta = 96;
 const BurningRequestDepositToSCMetaV2 = 242;
 const WithDrawRewardRequestMeta = 44;
-const PDEContributionMeta = 90;
-const PDETradeRequestMeta = 91;
-const PDETradeResponseMeta = 92;
-const PDEWithdrawalRequestMeta = 93;
-const PDEWithdrawalResponseMeta = 94;
+const PDEContributionMeta = 204;
+const PDETradeRequestMeta = 205;
+const PDETradeResponseMeta = 206;
+const PDEWithdrawalRequestMeta = 207;
+const PDEWithdrawalResponseMeta = 208;
 
 const PRVID = [4];
 const PRVIDSTR = '0000000000000000000000000000000000000000000000000000000000000004';
