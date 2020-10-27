@@ -33,10 +33,8 @@ const BurnAddress =
 const BurnAddress2 =
 '12RxahVABnAVCGP3LGwCn8jkQxgw7z1x14wztHzn455TTVpi1wBq9YGwkRMQg3J4e657AbAnCvYCJSdA9czBUNuCKwGSRQt55Xwz8WA';
 
-const BurningRequestMeta = 27;
-const BurningRequestMetaV2  = 240;
-const BurningRequestDepositToSCMeta = 96;
-const BurningRequestDepositToSCMetaV2 = 242;
+const BurningRequestMeta = 240;
+const BurningRequestDepositToSCMeta = 242;
 const WithDrawRewardRequestMeta = 44;
 const PDEContributionMeta = 204;
 const PDETradeRequestMeta = 205;
@@ -78,9 +76,7 @@ export {
   NanoUnit,
   BurnAddress,
   BurningRequestMeta,
-  BurningRequestMetaV2,
   BurningRequestDepositToSCMeta,
-  BurningRequestDepositToSCMetaV2,
   WithDrawRewardRequestMeta,
   PRVID,
   NoStakeStatus,

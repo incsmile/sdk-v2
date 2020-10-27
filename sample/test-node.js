@@ -106,19 +106,19 @@ async function main() {
     //       "4129f4ca2b2eba286a3bd1b96716d64e0bc02bd2cc1837776b66f67eb5797d79", 10000000000, 1, 10, 0));
     // });
 
-    await section('ACCOUNT FOLLOW TOKEN', async () => {
-      state.privacyToken = await state.importedAccount.getFollowingPrivacyToken('a0a22d131bbfdc892938542f0dbe1a7f2f48e16bc46bf1c5404319335dc1f0df');
-      console.log(state.importedAccount.privacyTokenIds);   
-      console.log(state.privacyToken);
+  //   await section('ACCOUNT FOLLOW TOKEN', async () => {
+  //     state.privacyToken = await state.importedAccount.getFollowingPrivacyToken('a0a22d131bbfdc892938542f0dbe1a7f2f48e16bc46bf1c5404319335dc1f0df');
+  //     console.log(state.importedAccount.privacyTokenIds);   
+  //     console.log(state.privacyToken);
       
       
       
-    });
+  //   });
 
-    await section('TRADE PRIVACY TOKEN', async () => {
-      console.log(await state.privacyToken.requestTrade(
-        "0000000000000000000000000000000000000000000000000000000000000004", 10000000, 1, 10, 0, 0));
-  });
+  //   await section('TRADE PRIVACY TOKEN', async () => {
+  //     console.log(await state.privacyToken.requestTrade(
+  //       "0000000000000000000000000000000000000000000000000000000000000004", 10000000, 1, 10, 0, 0));
+  // });
     
 
     // await section('CREATE RAW NATIVE TOKEN TX', async () => {
