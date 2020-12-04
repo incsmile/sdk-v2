@@ -41,6 +41,7 @@ const PDETradeRequestMeta = 205;
 const PDETradeResponseMeta = 206;
 const PDEWithdrawalRequestMeta = 207;
 const PDEWithdrawalResponseMeta = 208;
+const ShieldTokenMeta = 80;
 
 const PRVID = [4];
 const PRVIDSTR = '0000000000000000000000000000000000000000000000000000000000000004';
@@ -97,4 +98,5 @@ export {
   StopAutoStakingMeta,
   ShardNumber,
   BurnAddress2,
+  ShieldTokenMeta,
 };

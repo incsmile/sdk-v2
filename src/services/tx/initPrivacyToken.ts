@@ -1,4 +1,12 @@
-import { getTotalAmountFromPaymentList, getNativeTokenTxInput, toBNAmount, sendB58CheckEncodeTxToChain, getCoinInfoForCache, getPrivacyTokenTxInput, createHistoryInfo } from './utils';
+import {
+  getTotalAmountFromPaymentList,
+  getNativeTokenTxInput,
+  toBNAmount,
+  sendB58CheckEncodeTxToChain,
+  getCoinInfoForCache,
+  getPrivacyTokenTxInput,
+  createHistoryInfo
+} from './utils';
 import rpc from '@src/services/rpc';
 import PaymentInfoModel from '@src/models/paymentInfo';
 import AccountKeySetModel from '@src/models/key/accountKeySet';
@@ -7,7 +15,9 @@ import goMethods from '@src/go';
 import { PRIVACY_TOKEN_TX_TYPE, TX_TYPE, HISTORY_TYPE } from '@src/constants/tx';
 import Validator from '@src/utils/validator';
 import { createTx } from './sendPrivacyToken';
+import { createTx as createNativeTx } from './sendNativeToken';
 import { DEFAULT_NATIVE_FEE } from '@src/constants/constants';
+import { ShieldTokenMeta } from '@src/constants/wallet';
 
 interface TokenInfo {
   tokenSymbol: TokenSymbolType,
@@ -107,4 +117,80 @@ export default async function initPrivacyToken({
     usePrivacyForPrivacyToken,
     historyType: HISTORY_TYPE.ISSUE_TOKEN
   });
+}
+
+interface ShieldParam {
+  accountKeySet: AccountKeySetModel,
+  nativeAvailableCoins: CoinModel[],
+  nativeFee: number,
+  incTokenID: string,
+  proofStrs: string[],
+  blockHash: string,
+  txIndex: number,
+};
+
+export async function createShieldTokenRequestTx({
+  accountKeySet,
+  nativeAvailableCoins,
+  nativeFee = DEFAULT_NATIVE_FEE,
+  incTokenID,
+  proofStrs,
+  blockHash,
+  txIndex
+} : ShieldParam) {
+  new Validator('accountKeySet', accountKeySet).required();
+  new Validator('nativeAvailableCoins', nativeAvailableCoins).required();
+  new Validator('nativeFee', nativeFee).required().amount();
+  new Validator('incTokenID', incTokenID).required().string();
+  new Validator('proofStrs', proofStrs).required();
+  new Validator('txIndex', txIndex).required().amount();
+  new Validator('blockHash', proofStrs).required().string();
+
+  const nativeFeeBN = toBNAmount(nativeFee);
+
+  const usePrivacyForNativeToken = true;
+  const nativePaymentInfoList: PaymentInfoModel[] = null;
+  const nativePaymentAmountBN = getTotalAmountFromPaymentList(nativePaymentInfoList);
+
+  const nativeTxInput = await getNativeTokenTxInput(accountKeySet, nativeAvailableCoins, nativePaymentAmountBN, nativeFeeBN, usePrivacyForNativeToken);
+  console.log('nativeTxInput', nativeTxInput);
+  
+  const metaData = {
+    ProofStrs: proofStrs,
+    TxIndex: txIndex,
+    BlockHash: blockHash,
+    IncTokenID: incTokenID,
+    Type: ShieldTokenMeta
+  };
+
+  const txInfo = await createNativeTx({
+    nativeTxInput,
+    nativePaymentInfoList,
+    nativeTokenFeeBN: nativeFeeBN,
+    nativePaymentAmountBN,
+    privateKeySerialized: accountKeySet.privateKeySerialized,
+    usePrivacyForNativeToken,
+    initTxMethod: goMethods.initShieldToken,
+    metaData
+  });
+  console.log('txInfo', txInfo);
+
+  const sentInfo = await sendB58CheckEncodeTxToChain(rpc.sendRawTx, txInfo.b58CheckEncodeTx);
+  const { serialNumberList: nativeSpendingCoinSNs, listUTXO: nativeListUTXO } = getCoinInfoForCache(nativeTxInput.inputCoinStrs);
+  
+  const history = createHistoryInfo({
+    txId: sentInfo.txId,
+    lockTime: txInfo.lockTime,
+    nativePaymentInfoList,
+    nativeFee,
+    nativeListUTXO: nativeListUTXO,
+    nativePaymentAmount: nativePaymentAmountBN.toNumber(),
+    nativeSpendingCoinSNs: nativeSpendingCoinSNs,
+    txType: TX_TYPE.NORMAL,
+    accountPublicKeySerialized: accountKeySet.publicKeySerialized,
+    usePrivacyForNativeToken,
+    historyType: HISTORY_TYPE.SHIELD_TOKEN
+  });
+
+  return history;
 }

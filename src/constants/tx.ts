@@ -40,6 +40,7 @@ export const HISTORY_TYPE = {
   PDE_TRADE_REQUEST_PRIVACY_TOKEN: 7,
   STAKING_REQUEST: 8,
   WITHDRAW_REWARD: 9,
+  SHIELD_TOKEN: 10,
 };
 
 // todo: 0xkraken

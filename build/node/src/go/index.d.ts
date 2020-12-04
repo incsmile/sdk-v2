@@ -14,6 +14,7 @@ declare const methods: {
     initPRVContributionTx: any;
     initWithdrawRewardTx: any;
     initBurningRequestTx: any;
+    initShieldToken: any;
     generateKeyFromSeed: any;
     scalarMultBase: any;
     hybridEncryptionASM: any;

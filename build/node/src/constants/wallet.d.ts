@@ -28,6 +28,7 @@ declare const PDETradeRequestMeta = 205;
 declare const PDETradeResponseMeta = 206;
 declare const PDEWithdrawalRequestMeta = 207;
 declare const PDEWithdrawalResponseMeta = 208;
+declare const ShieldTokenMeta = 80;
 declare const PRVID: number[];
 declare const PRVIDSTR = "0000000000000000000000000000000000000000000000000000000000000004";
 declare const PDEPOOLKEY = "pdepool";
@@ -38,5 +39,5 @@ declare const MenmonicWordLen = 12;
 declare const PercentFeeToReplaceTx = 10;
 declare const MaxSizeInfoCoin = 255;
 declare const ShardNumber = 8;
-export { PriKeyType, PaymentAddressType, ViewingKeyType, PublicKeyType, PriKeySerializeSize, PaymentAddrSerializeSize, ReadonlyKeySerializeSize, PublicKeySerializeSize, MetaStakingBeacon, MetaStakingShard, ShardStakingType, BeaconStakingType, MaxTxSize, ChildNumberSize, ChainCodeSize, PercentFeeToReplaceTx, NanoUnit, BurnAddress, BurningRequestMeta, BurningRequestDepositToSCMeta, WithDrawRewardRequestMeta, PRVID, NoStakeStatus, CandidatorStatus, ValidatorStatus, PDEContributionMeta, PDETradeRequestMeta, PDETradeResponseMeta, PDEWithdrawalRequestMeta, PDEWithdrawalResponseMeta, PRVIDSTR, PDEPOOLKEY, PriKeySerializeAddCheckSumSize, PaymentAddrSerializeAddCheckSumSize, ReadonlyKeySerializeAddCheckSumSize, MenmonicWordLen, MaxSizeInfoCoin, StopAutoStakingMeta, ShardNumber, BurnAddress2, };
+export { PriKeyType, PaymentAddressType, ViewingKeyType, PublicKeyType, PriKeySerializeSize, PaymentAddrSerializeSize, ReadonlyKeySerializeSize, PublicKeySerializeSize, MetaStakingBeacon, MetaStakingShard, ShardStakingType, BeaconStakingType, MaxTxSize, ChildNumberSize, ChainCodeSize, PercentFeeToReplaceTx, NanoUnit, BurnAddress, BurningRequestMeta, BurningRequestDepositToSCMeta, WithDrawRewardRequestMeta, PRVID, NoStakeStatus, CandidatorStatus, ValidatorStatus, PDEContributionMeta, PDETradeRequestMeta, PDETradeResponseMeta, PDEWithdrawalRequestMeta, PDEWithdrawalResponseMeta, PRVIDSTR, PDEPOOLKEY, PriKeySerializeAddCheckSumSize, PaymentAddrSerializeAddCheckSumSize, ReadonlyKeySerializeAddCheckSumSize, MenmonicWordLen, MaxSizeInfoCoin, StopAutoStakingMeta, ShardNumber, BurnAddress2, ShieldTokenMeta, };
 //# sourceMappingURL=wallet.d.ts.map

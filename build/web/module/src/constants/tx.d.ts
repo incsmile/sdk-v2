@@ -35,6 +35,7 @@ export declare const HISTORY_TYPE: {
     PDE_TRADE_REQUEST_PRIVACY_TOKEN: number;
     STAKING_REQUEST: number;
     WITHDRAW_REWARD: number;
+    SHIELD_TOKEN: number;
 };
 export declare const MaxInputNumberForDefragment = 50;
 export declare const MaxInfoSize = 512;

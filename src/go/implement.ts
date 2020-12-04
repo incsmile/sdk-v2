@@ -1,5 +1,5 @@
 type GoMethod = (data: string) => string;
-type MethodName = 'deriveSerialNumber'|'randomScalars'|'initPrivacyTx'|'initPrivacyTokenTx'|'initBurningRequestTx'|'initWithdrawRewardTx'|'staking'|
+type MethodName = 'deriveSerialNumber'|'randomScalars'|'initPrivacyTx'|'initShieldToken'|'initPrivacyTokenTx'|'initBurningRequestTx'|'initWithdrawRewardTx'|'staking'|
 'generateBLSKeyPairFromSeed'|'initPRVContributionTx'|'initPTokenContributionTx'|'initPRVTradeTx'|'initPTokenTradeTx'|'withdrawDexTx'|
 'hybridDecryptionASM'|'hybridEncryptionASM'|'stopAutoStaking'|'scalarMultBase'|'generateKeyFromSeed';
 type GoMethods = {
@@ -13,6 +13,7 @@ export const GO_METHOD_NAMES = [
   'initPrivacyTokenTx',
   'initBurningRequestTx',
   'initWithdrawRewardTx',
+  'initShieldToken',
   'staking',
   'generateBLSKeyPairFromSeed',
   'initPRVContributionTx',

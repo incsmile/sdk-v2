@@ -9,6 +9,7 @@ import sendStakingRequest from '@src/services/tx/sendStakingRequest';
 import sendNativeTokenPdeContribution from '@src/services/tx/sendNativeTokenPdeContribution';
 import sendNativeTokenPdeTradeRequest from '@src/services/tx/sendNativeTokenPdeTradeRequest';
 import Validator from '@src/utils/validator';
+import { createShieldTokenRequestTx } from '@src/services/tx/initPrivacyToken';
 // import sendNativeTokenDefragment from '@src/services/tx/sendNativeTokenDefragment';
 
 class NativeToken extends Token implements NativeTokenModel {
@@ -153,6 +154,33 @@ class NativeToken extends Token implements NativeTokenModel {
       L.error('Native token sent trade request failed', e);
       throw e;
     }
+  }
+
+  async createRawTxForShieldingToken(incTokenID: string, blockHash: string, txIndex: number, proofStrs: string[], nativeFee: number) {
+    try {
+      new Validator('incTokenID', incTokenID).required().string();
+      new Validator('blockHash', blockHash).required().string();
+      new Validator('txIndex', txIndex).required().amount();
+      new Validator('proofStrs', proofStrs).required();
+      new Validator('nativeFee', nativeFee).required().amount();
+  
+      L.info(`Shielding privacy token`, {incTokenID, blockHash, txIndex, proofStrs, nativeFee});
+
+      const res = await createShieldTokenRequestTx({
+        accountKeySet: this.accountKeySet,
+        nativeAvailableCoins: await this.getAvailableCoins(),
+        nativeFee,
+        incTokenID,
+        proofStrs,
+        blockHash,
+        txIndex,
+      });
+
+      return res;
+    } catch (e) {
+      L.error(`Privacy token ${this.tokenId} create burning request failed`, e);
+      throw e;
+    } 
   }
 
   // async defragment(defragmentAmount: number, nativeFee: number, maxCoinNumberToDefragment?: number) {
