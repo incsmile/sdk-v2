@@ -36,7 +36,7 @@
     return err;
   };
 
-  if (!global.fs) {
+  if (!global.fs || (global.fs && !global.fs.writeSync)) {
     let outputBuf = '';
     global.fs = {
       constants: { O_WRONLY: -1, O_RDWR: -1, O_CREAT: -1, O_TRUNC: -1, O_APPEND: -1, O_EXCL: -1 }, // unused
