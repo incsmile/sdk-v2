@@ -149,7 +149,7 @@ export async function createShieldTokenRequestTx({
   const nativeFeeBN = toBNAmount(nativeFee);
 
   const usePrivacyForNativeToken = true;
-  const nativePaymentInfoList: PaymentInfoModel[] = null;
+  const nativePaymentInfoList = <PaymentInfoModel[]>null;
   const nativePaymentAmountBN = getTotalAmountFromPaymentList(nativePaymentInfoList);
 
   const nativeTxInput = await getNativeTokenTxInput(accountKeySet, nativeAvailableCoins, nativePaymentAmountBN, nativeFeeBN, usePrivacyForNativeToken);
