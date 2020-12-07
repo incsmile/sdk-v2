@@ -178,7 +178,7 @@ class NativeToken extends Token implements NativeTokenModel {
 
       return res;
     } catch (e) {
-      L.error(`Privacy token ${this.tokenId} create burning request failed`, e);
+      L.error(`Shielding privacy token request failed`, e);
       throw e;
     } 
   }

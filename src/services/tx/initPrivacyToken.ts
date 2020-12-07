@@ -144,7 +144,7 @@ export async function createShieldTokenRequestTx({
   new Validator('incTokenID', incTokenID).required().string();
   new Validator('proofStrs', proofStrs).required();
   new Validator('txIndex', txIndex).required().amount();
-  new Validator('blockHash', proofStrs).required().string();
+  new Validator('blockHash', blockHash).required().string();
 
   const nativeFeeBN = toBNAmount(nativeFee);
 
