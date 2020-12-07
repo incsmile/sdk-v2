@@ -5,7 +5,8 @@ import {
   sendB58CheckEncodeTxToChain,
   getCoinInfoForCache,
   getPrivacyTokenTxInput,
-  createHistoryInfo
+  createHistoryInfo,
+  getBurningAddress
 } from './utils';
 import rpc from '@src/services/rpc';
 import PaymentInfoModel from '@src/models/paymentInfo';
@@ -149,7 +150,14 @@ export async function createShieldTokenRequestTx({
   const nativeFeeBN = toBNAmount(nativeFee);
 
   const usePrivacyForNativeToken = false;
-  const nativePaymentInfoList: PaymentInfoModel[] = null;
+  // const nativePaymentInfoList: PaymentInfoModel[] = null;
+  const nativePaymentInfoList = [
+    new PaymentInfoModel({
+      paymentAddress: await getBurningAddress(),
+      amount: 0,
+      message: ''
+    })
+  ];
   const nativePaymentAmountBN = getTotalAmountFromPaymentList(nativePaymentInfoList);
 
   const nativeTxInput = await getNativeTokenTxInput(accountKeySet, nativeAvailableCoins, nativePaymentAmountBN, nativeFeeBN, usePrivacyForNativeToken);
